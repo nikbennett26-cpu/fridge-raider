@@ -1,11 +1,41 @@
 import streamlit as st
 
-st.set_page_config(page_title="Fridge Raider v3", layout="wide")
+st.set_page_config(page_title="Fridge Raider v3 Pro", layout="wide")
 
-st.title("🧊 Fridge Raider v3")
+# --- CSS: THE MESH GRADIENT BACKGROUND ---
+st.markdown("""
+<style>
+    /* Target the main Streamlit container */
+    .stApp {
+        background-color: #ffdeeb;
+        background-image: 
+            radial-gradient(at 80% 0%, hsla(189,100%,56%,0.3) 0px, transparent 50%),
+            radial-gradient(at 0% 50%, hsla(355,100%,93%,0.3) 0px, transparent 50%),
+            radial-gradient(at 80% 50%, hsla(340,100%,76%,0.3) 0px, transparent 50%),
+            radial-gradient(at 0% 100%, hsla(22,100%,77%,0.3) 0px, transparent 50%),
+            radial-gradient(at 80% 100%, hsla(242,100%,70%,0.3) 0px, transparent 50%),
+            radial-gradient(at 0% 0%, hsla(343,100%,76%,0.3) 0px, transparent 50%);
+    }
+    
+    /* Make the cards slightly transparent white to pop against the background */
+    div[data-testid="stExpander"], div[data-testid="stImage"] {
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        padding: 10px;
+    }
+    
+    /* Enhance the title text */
+    h1 {
+        color: #1f2937;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.title("🧊 Fridge Raider v3 Pro")
 st.write("Select the ingredients you have, and I'll tell you what to cook!")
 
-# --- THE EXPANDED RECIPE DATABASE (30 ITEMS) ---
+# --- THE MASSIVE RECIPE DATABASE (45+ ITEMS) ---
 recipes = [
     # --- BREAKFAST ---
     {
@@ -44,6 +74,12 @@ recipes = [
         "instructions": "Blend all ingredients until smooth.",
         "image": "https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=400&q=80"
     },
+    {
+        "name": "Avocado Toast with Egg 🥑",
+        "ingredients": {"bread", "avocado", "eggs", "chili flakes", "lemon"},
+        "instructions": "Toast bread, smash avocado with lemon. Top with fried/poached egg and chili.",
+        "image": "https://images.unsplash.com/photo-1525351484164-8035a4206501?auto=format&fit=crop&w=400&q=80"
+    },
 
     # --- LUNCH ---
     {
@@ -59,12 +95,6 @@ recipes = [
         "image": "https://images.unsplash.com/photo-1553909489-cd47e3faaefc?auto=format&fit=crop&w=400&q=80"
     },
     {
-        "name": "Avocado Toast 🥑",
-        "ingredients": {"bread", "avocado", "salt", "lemon", "oil"},
-        "instructions": "Toast bread, smash avocado on top, season with salt and lemon.",
-        "image": "https://images.unsplash.com/photo-1588137372308-15f75323a557?auto=format&fit=crop&w=400&q=80"
-    },
-    {
         "name": "Classic Tuna Salad 🐟",
         "ingredients": {"tuna", "mayo", "onion", "celery", "bread"},
         "instructions": "Mix tuna, mayo, diced onion and celery. Serve on bread or lettuce.",
@@ -78,23 +108,41 @@ recipes = [
     },
     {
         "name": "Greek Salad 🇬🇷",
-        "ingredients": {"cucumber", "tomato", "feta", "olives", "onion", "oil"},
+        "ingredients": {"cucumber", "tomato", "feta", "olives", "onion", "olive oil"},
         "instructions": "Chop veggies roughly. Toss with olive oil and top with block of feta.",
         "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=400&q=80"
     },
     {
         "name": "Caprese Salad 🇮🇹",
-        "ingredients": {"tomato", "mozzarella", "basil", "oil", "balsamic"},
+        "ingredients": {"tomato", "mozzarella", "basil", "olive oil", "balsamic vinegar"},
         "instructions": "Slice tomatoes and cheese, arrange with basil, drizzle with oil.",
         "image": "https://images.unsplash.com/photo-1529312266912-b33cf6227e24?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Hummus & Veggies 🥕",
+        "ingredients": {"chickpeas", "lemon", "garlic", "olive oil", "tahini", "carrots"},
+        "instructions": "Blend chickpeas, lemon, garlic, tahini and oil. Serve with carrot sticks.",
+        "image": "https://images.unsplash.com/photo-1577906096429-f736f6f3a35d?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Quinoa Salad 🥣",
+        "ingredients": {"quinoa", "cucumber", "tomato", "lemon", "feta", "parsley"},
+        "instructions": "Cook quinoa. Mix with chopped veggies, crumbled feta, lemon juice and herbs.",
+        "image": "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?auto=format&fit=crop&w=400&q=80"
     },
 
     # --- DINNER ---
     {
         "name": "Tomato Pasta 🍝",
-        "ingredients": {"pasta", "tomato sauce", "garlic", "oil"},
+        "ingredients": {"pasta", "tomato sauce", "garlic", "olive oil"},
         "instructions": "Boil pasta, sauté garlic in oil, add sauce, mix.",
         "image": "https://images.unsplash.com/photo-1626844131082-256783844137?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Pesto Pasta 🍃",
+        "ingredients": {"pasta", "pesto", "parmesan", "cherry tomatoes"},
+        "instructions": "Boil pasta. Save some pasta water. Toss pasta with pesto and a splash of water. Top with tomatoes.",
+        "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=400&q=80"
     },
     {
         "name": "Garlic Butter Shrimp 🍤",
@@ -107,6 +155,12 @@ recipes = [
         "ingredients": {"chicken", "rice", "soy sauce", "vegetables", "oil"},
         "instructions": "Cook chicken, add veggies, stir in sauce, serve over rice.",
         "image": "https://images.unsplash.com/photo-1603133872878-684f10842619?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Tofu Stir Fry 🥦",
+        "ingredients": {"tofu", "soy sauce", "ginger", "garlic", "broccoli", "rice"},
+        "instructions": "Press tofu, cube, and fry. Remove. Fry aromatics and broccoli. Combine with sauce over rice.",
+        "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=80"
     },
     {
         "name": "Beef & Broccoli 🥦",
@@ -125,6 +179,12 @@ recipes = [
         "ingredients": {"tortilla", "ground beef", "cheese", "lettuce", "salsa"},
         "instructions": "Cook meat, fill tortillas, top with cheese and salsa.",
         "image": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Black Bean Burrito 🌯",
+        "ingredients": {"tortilla", "black beans", "rice", "cheese", "salsa", "corn"},
+        "instructions": "Warm beans and corn. Layer rice, beans, corn, and cheese in tortilla. Roll and serve.",
+        "image": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=400&q=80"
     },
     {
         "name": "Chicken Curry 🍛",
@@ -168,6 +228,18 @@ recipes = [
         "instructions": "Boil and mash potatoes with butter/milk. Serve with roasted chicken.",
         "image": "https://images.unsplash.com/photo-1604908177453-7462950a6a3b?auto=format&fit=crop&w=400&q=80"
     },
+    {
+        "name": "Chicken Noodle Soup 🍜",
+        "ingredients": {"chicken", "broth", "carrots", "celery", "pasta", "onion"},
+        "instructions": "Sauté veggies. Add broth and chicken. Simmer. Add pasta near the end.",
+        "image": "https://images.unsplash.com/photo-1547592166-23acbe346499?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Baked Salmon 🐟",
+        "ingredients": {"salmon", "lemon", "butter", "garlic", "herbs"},
+        "instructions": "Place salmon on foil. Top with butter, garlic, lemon. Bake 400F for 12-15 mins.",
+        "image": "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=400&q=80"
+    },
     
     # --- DESSERT / SNACKS ---
     {
@@ -183,6 +255,12 @@ recipes = [
         "image": "https://images.unsplash.com/photo-1499636138143-bd630f5cf386?auto=format&fit=crop&w=400&q=80"
     },
     {
+        "name": "Chocolate Mug Cake ☕",
+        "ingredients": {"flour", "sugar", "cocoa powder", "milk", "oil", "chocolate chips"},
+        "instructions": "Mix all ingredients in a microwave-safe mug. Microwave for 60-90 seconds.",
+        "image": "https://images.unsplash.com/photo-1586985289906-406988974504?auto=format&fit=crop&w=400&q=80"
+    },
+    {
         "name": "Guacamole & Chips 🥑",
         "ingredients": {"avocado", "onion", "tomato", "lime", "tortilla chips"},
         "instructions": "Mash avocado with lime and salt. Stir in diced onion/tomato. Serve with chips.",
@@ -193,6 +271,12 @@ recipes = [
         "ingredients": {"apple", "peanut butter"},
         "instructions": "Slice apple, dip in peanut butter. Simple and healthy.",
         "image": "https://images.unsplash.com/photo-1632161845691-32c0211329c4?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Deviled Eggs 🥚",
+        "ingredients": {"eggs", "mayo", "mustard", "paprika"},
+        "instructions": "Boil eggs, peel, halve. Mix yolks with mayo/mustard. Pipe back in. Dust paprika.",
+        "image": "https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=400&q=80"
     }
 ]
 
