@@ -66,4 +66,122 @@ recipes = [
         "name": "Caprese Salad 🇮🇹",
         "ingredients": {"tomato", "mozzarella", "basil", "oil", "balsamic"},
         "instructions": "Slice tomatoes and cheese, arrange with basil, drizzle with oil.",
-        "image": "
+        "image": "https://images.unsplash.com/photo-1529312266912-b33cf6227e24?auto=format&fit=crop&w=400&q=80"
+    },
+
+    # --- DINNER ---
+    {
+        "name": "Tomato Pasta 🍝",
+        "ingredients": {"pasta", "tomato sauce", "garlic", "oil"},
+        "instructions": "Boil pasta, sauté garlic in oil, add sauce, mix.",
+        "image": "https://images.unsplash.com/photo-1626844131082-256783844137?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Chicken Stir Fry 🥡",
+        "ingredients": {"chicken", "rice", "soy sauce", "vegetables", "oil"},
+        "instructions": "Cook chicken, add veggies, stir in sauce, serve over rice.",
+        "image": "https://images.unsplash.com/photo-1603133872878-684f10842619?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Spaghetti Carbonara 🇮🇹",
+        "ingredients": {"pasta", "eggs", "cheese", "bacon", "black pepper"},
+        "instructions": "Boil pasta. Fry bacon. Mix eggs and cheese. Toss hot pasta with egg mix (off heat) to create creamy sauce.",
+        "image": "https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Simple Tacos 🌮",
+        "ingredients": {"tortilla", "ground beef", "cheese", "lettuce", "salsa"},
+        "instructions": "Cook meat, fill tortillas, top with cheese and salsa.",
+        "image": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Chicken Curry 🍛",
+        "ingredients": {"chicken", "curry paste", "coconut milk", "rice", "onion"},
+        "instructions": "Fry onion and chicken, add paste, pour in milk, simmer. Serve with rice.",
+        "image": "https://images.unsplash.com/photo-1631292784640-2b24be784d5d?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Fried Rice 🍚",
+        "ingredients": {"rice", "eggs", "soy sauce", "peas", "carrots", "oil"},
+        "instructions": "Fry veggies, push to side, scramble eggs, add rice and sauce, mix high heat.",
+        "image": "https://images.unsplash.com/photo-1603133872878-684f10842619?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Homemade Pizza 🍕",
+        "ingredients": {"flour", "yeast", "tomato sauce", "cheese", "pepperoni"},
+        "instructions": "Make dough, add sauce and toppings, bake at high heat (450F) for 12 mins.",
+        "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Quesadillas 🧀",
+        "ingredients": {"tortilla", "cheese", "chicken", "onion", "salsa"},
+        "instructions": "Place cheese and chicken on tortilla, fold, fry in pan until crispy.",
+        "image": "https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Mashed Potatoes & Chicken 🍗",
+        "ingredients": {"potatoes", "butter", "milk", "chicken", "salt"},
+        "instructions": "Boil and mash potatoes with butter/milk. Serve with roasted chicken.",
+        "image": "https://images.unsplash.com/photo-1604908177453-7462950a6a3b?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Banana Bread 🍌",
+        "ingredients": {"banana", "flour", "sugar", "butter", "eggs"},
+        "instructions": "Mash bananas, mix with wet then dry ingredients. Bake 350F for 60 mins.",
+        "image": "https://images.unsplash.com/photo-1596229961623-455b768172c7?auto=format&fit=crop&w=400&q=80"
+    }
+]
+
+# --- APP LOGIC ---
+
+# 1. Setup ingredients list
+all_possible_ingredients = set()
+for r in recipes:
+    all_possible_ingredients.update(r['ingredients'])
+
+sorted_ingredients = sorted(list(all_possible_ingredients))
+
+# 2. Sidebar Controls
+st.sidebar.header("Your Fridge")
+user_ingredients = st.sidebar.multiselect(
+    "Select what you have:", 
+    options=sorted_ingredients,
+    default=["eggs", "cheese", "butter"]
+)
+user_fridge = set(user_ingredients)
+
+# 3. Find and Display Matches
+st.header("Recommended Recipes:")
+col1, col2 = st.columns(2)
+
+found_match = False
+
+for i, recipe in enumerate(recipes):
+    required_ingredients = recipe['ingredients']
+    matching_items = user_fridge.intersection(required_ingredients)
+    
+    # Logic: Show if we have at least 1 matching ingredient
+    if len(matching_items) >= 1:
+        found_match = True
+        
+        # Display in alternating columns
+        with (col1 if i % 2 == 0 else col2):
+            st.image(recipe['image'], use_container_width=True)
+            st.subheader(recipe['name'])
+            
+            missing = required_ingredients - user_fridge
+            
+            if not missing:
+                st.success("✅ You have everything!")
+                with st.expander("View Instructions"):
+                    st.write(recipe['instructions'])
+            else:
+                match_percent = int((len(matching_items) / len(required_ingredients)) * 100)
+                st.progress(match_percent, text=f"{match_percent}% Match")
+                st.error(f"Missing: {', '.join(missing)}")
+                
+                if st.checkbox(f"Add missing items to list", key=recipe['name']):
+                    st.sidebar.info(f"🛒 Buy: {', '.join(missing)}")
+
+if not found_match:
+    st.warning("No matches yet! Try selecting more ingredients.")
