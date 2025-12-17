@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("🧊 Fridge Raider v3")
+st.title("🧊 Fridge Raider v3.1")
 st.write("Select the ingredients you have, and I'll tell you what to cook!")
 
 # --- THE RECIPE DATABASE (20 ITEMS) ---
@@ -125,13 +125,11 @@ recipes = [
         "image": "https://images.unsplash.com/photo-1604908177453-7462950a6a3b?auto=format&fit=crop&w=400&q=80"
     },
     {
-      {
-        {
         "name": "Banana Bread 🍌",
         "ingredients": {"banana", "flour", "sugar", "butter", "eggs"},
         "instructions": "Mash bananas, mix with wet then dry ingredients. Bake 350F for 60 mins.",
+        # THIS IS THE NEW WORKING IMAGE LINK:
         "image": "https://images.unsplash.com/photo-1605292356183-a77d0a9c9d1d?auto=format&fit=crop&w=400&q=80"
-    
     }
 ]
 
@@ -187,6 +185,4 @@ for i, recipe in enumerate(recipes):
                     st.sidebar.info(f"🛒 Buy: {', '.join(missing)}")
 
 if not found_match:
-
     st.warning("No matches yet! Try selecting more ingredients.")
-
