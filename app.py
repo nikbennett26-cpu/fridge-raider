@@ -3,7 +3,7 @@ import streamlit as st
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Fridge Raider v3 Pro", layout="wide")
 
-# --- PROFESSIONAL "CLEAN CARD" CSS ---
+# --- PROFESSIONAL "CLEAN CARD" CSS (FIXED FOR MOBILE DROPDOWNS) ---
 st.markdown("""
 <style>
     /* 1. MAIN BACKGROUND - Soft Off-White */
@@ -18,7 +18,7 @@ st.markdown("""
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
     
-    /* 3. HEADER STYLING - A modern gradient text effect */
+    /* 3. HEADER STYLING */
     h1 {
         background: -webkit-linear-gradient(45deg, #2563eb, #9333ea);
         -webkit-background-clip: text;
@@ -34,26 +34,55 @@ st.markdown("""
         border-right: 1px solid #e5e7eb;
     }
     
-    /* 5. INPUT BOXES - Clean white with shadow */
-    .stMultiSelect div[data-baseweb="select"] {
-        background-color: white !important;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
+    /* --- 5. FIXED DROPDOWN MENUS (The Critical Fix) --- */
+    
+    /* Force the dropdown list container to be white */
+    ul[data-baseweb="menu"] {
+        background-color: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
     }
     
+    /* Force the options inside the list to be dark grey */
+    li[data-baseweb="option"] {
+        color: #1f2937 !important;
+    }
+    
+    /* Highlight color when you hover or select an option */
+    li[data-baseweb="option"]:hover, li[data-baseweb="option"][aria-selected="true"] {
+        background-color: #eff6ff !important;
+        color: #2563eb !important; /* Blue text on highlight */
+    }
+
+    /* Fix the actual input box (where you type) */
+    div[data-baseweb="select"] > div {
+        background-color: #ffffff !important;
+        color: #1f2937 !important;
+        border: 1px solid #d1d5db;
+    }
+    
+    /* Ensure the text inside the input box is dark */
+    div[data-baseweb="select"] span {
+        color: #1f2937 !important;
+    }
+    
+    /* Fix the 'X' button and arrow in the dropdown */
+    div[data-baseweb="select"] svg {
+        fill: #6b7280 !important;
+    }
+
+    /* --- END OF FIX --- */
+    
     /* 6. IMAGE & CARD STYLING */
-    /* This targets the container holding the image and text */
     div[data-testid="stVerticalBlock"] > div > div[data-testid="stImage"] {
         border-radius: 12px 12px 0 0;
         overflow: hidden;
     }
     
-    /* Add a card-like container around content */
     div.block-container {
         padding-top: 2rem;
     }
     
-    /* Expander Styling (Instructions) */
+    /* Expander Styling */
     .streamlit-expanderHeader {
         background-color: #ffffff !important;
         border: 1px solid #e5e7eb;
@@ -61,13 +90,7 @@ st.markdown("""
         color: #1f2937 !important;
     }
     
-    /* Success/Error/Warning Messages - make them pop */
-    .stAlert {
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    
-    /* Force tags in sidebar to be visible */
+    /* Sidebar Tags */
     span[data-baseweb="tag"] {
         background-color: #eff6ff !important;
         border: 1px solid #bfdbfe;
