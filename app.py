@@ -125,10 +125,11 @@ recipes = [
         "image": "https://images.unsplash.com/photo-1604908177453-7462950a6a3b?auto=format&fit=crop&w=400&q=80"
     },
     {
+      {
         "name": "Banana Bread 🍌",
         "ingredients": {"banana", "flour", "sugar", "butter", "eggs"},
         "instructions": "Mash bananas, mix with wet then dry ingredients. Bake 350F for 60 mins.",
-        "image": "https://images.unsplash.com/photo-1596229961623-455b768172c7?auto=format&fit=crop&w=400&q=80"
+        "image": "https://images.unsplash.com/photo-1605292356183-a77d0a9c9d1d?auto=format&fit=crop&w=400&q=80"
     }
 ]
 
@@ -184,4 +185,5 @@ for i, recipe in enumerate(recipes):
                     st.sidebar.info(f"🛒 Buy: {', '.join(missing)}")
 
 if not found_match:
+
     st.warning("No matches yet! Try selecting more ingredients.")
