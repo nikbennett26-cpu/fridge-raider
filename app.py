@@ -1,0 +1,123 @@
+import streamlit as st
+
+st.title("🧊 Fridge Raider v2")
+st.write("Select the ingredients you have, and I'll tell you what to cook!")
+
+# 1. The Database (Now with Images!)
+recipes = [
+    {
+        "name": "Classic Omelette 🍳",
+        "ingredients": {"eggs", "cheese", "butter", "salt"},
+        "instructions": "Whisk eggs, melt butter, cook until fluffy, add cheese.",
+        "image": "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Tomato Pasta 🍝",
+        "ingredients": {"pasta", "tomato sauce", "garlic", "oil"},
+        "instructions": "Boil pasta, sauté garlic in oil, add sauce, mix.",
+        "image": "https://images.unsplash.com/photo-1626844131082-256783844137?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Grilled Cheese Sandwich 🥪",
+        "ingredients": {"bread", "cheese", "butter"},
+        "instructions": "Butter bread, place cheese inside, grill until golden.",
+        "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Fruit Smoothie 🥤",
+        "ingredients": {"banana", "milk", "honey", "ice"},
+        "instructions": "Blend all ingredients until smooth.",
+        "image": "https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Fluffy Pancakes 🥞",
+        "ingredients": {"eggs", "milk", "flour", "butter", "sugar"},
+        "instructions": "Mix dry and wet ingredients separately, combine, and fry in butter.",
+        "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "French Toast 🍞",
+        "ingredients": {"bread", "eggs", "milk", "cinnamon", "butter"},
+        "instructions": "Dip bread in egg/milk mix, fry in butter until golden brown.",
+        "image": "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Chicken Stir Fry 🥡",
+        "ingredients": {"chicken", "rice", "soy sauce", "vegetables", "oil"},
+        "instructions": "Cook chicken, add veggies, stir in sauce, serve over rice.",
+        "image": "https://images.unsplash.com/photo-1603133872878-684f10842619?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Avocado Toast 🥑",
+        "ingredients": {"bread", "avocado", "salt", "lemon", "oil"},
+        "instructions": "Toast bread, smash avocado on top, season with salt and lemon.",
+        "image": "https://images.unsplash.com/photo-1588137372308-15f75323a557?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Simple Tacos 🌮",
+        "ingredients": {"tortilla", "ground beef", "cheese", "lettuce", "salsa"},
+        "instructions": "Cook meat, fill tortillas, top with cheese and salsa.",
+        "image": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "BLT Sandwich 🥓",
+        "ingredients": {"bread", "bacon", "lettuce", "tomato", "mayo"},
+        "instructions": "Cook bacon, toast bread, layer ingredients with mayo.",
+        "image": "https://images.unsplash.com/photo-1553909489-cd47e3faaefc?auto=format&fit=crop&w=400&q=80"
+    }
+]
+# 2. Sidebar Setup
+all_possible_ingredients = set()
+for r in recipes:
+    all_possible_ingredients.update(r['ingredients'])
+
+sorted_ingredients = sorted(list(all_possible_ingredients))
+
+st.sidebar.header("Your Fridge")
+user_ingredients = st.sidebar.multiselect(
+    "Select what you have:", 
+    options=sorted_ingredients,
+    default=["eggs", "cheese", "butter"]
+)
+
+user_fridge = set(user_ingredients)
+
+# 3. Logic & Display
+st.header("Recommended Recipes:")
+col1, col2 = st.columns(2) # Create a 2-column layout for a nicer look
+
+found_match = False
+
+for i, recipe in enumerate(recipes):
+    required_ingredients = recipe['ingredients']
+    matching_items = user_fridge.intersection(required_ingredients)
+    
+    # Logic: Show if we have at least 1 matching ingredient
+    if len(matching_items) >= 1:
+        found_match = True
+        
+        # Display in alternating columns
+        with (col1 if i % 2 == 0 else col2):
+            st.image(recipe['image'], use_container_width=True)
+            st.subheader(recipe['name'])
+            
+            # Missing Ingredients Logic
+            missing = required_ingredients - user_fridge
+            
+            if not missing:
+                st.success("✅ You have everything!")
+                with st.expander("View Instructions"):
+                    st.write(recipe['instructions'])
+            else:
+                # Calculate simple percentage match
+                match_percent = int((len(matching_items) / len(required_ingredients)) * 100)
+                st.progress(match_percent, text=f"{match_percent}% Match")
+                
+                st.error(f"Missing: {', '.join(missing)}")
+                
+                # Shopping List Feature
+                if st.checkbox(f"Add missing items to list for {recipe['name']}", key=recipe['name']):
+                    st.sidebar.info(f"🛒 Buy: {', '.join(missing)}")
+
+if not found_match:
+    st.warning("No matches yet! Try selecting 'eggs' or 'pasta' in the sidebar.")
