@@ -1,280 +1,265 @@
 import streamlit as st
-import streamlit.components.v1 as components
 
-# --- 1. Set up the Streamlit Page ---
-st.set_page_config(page_title="Fridge Raider", layout="wide")
+st.set_page_config(page_title="Fridge Raider v3", layout="wide")
 
-# --- 2. Define the HTML/CSS/JS Logic ---
-HTML_CODE = """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        /* --- Global Styles --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f9fafb; color: #1f2937; line-height: 1.6; }
-        
-        .container { max-width: 100%; margin: 0 auto; padding: 20px; }
-        
-        /* --- Header & Search Section --- */
-        header { text-align: center; margin-bottom: 30px; padding-top: 20px; }
-        h1 { font-size: 2.5rem; color: #111; margin-bottom: 10px; }
-        .subtitle { color: #6b7280; font-size: 1.1rem; margin-bottom: 25px; }
+st.title("🧊 Fridge Raider v3")
+st.write("Select the ingredients you have, and I'll tell you what to cook!")
 
-        /* The Fridge Input */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 30px auto;
-            position: relative;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 15px 25px;
-            font-size: 1.2rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 50px;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        
-        .search-input:focus {
-            border-color: #e63946;
-            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.2);
-        }
+# --- THE EXPANDED RECIPE DATABASE (30 ITEMS) ---
+recipes = [
+    # --- BREAKFAST ---
+    {
+        "name": "Classic Omelette 🍳",
+        "ingredients": {"eggs", "cheese", "butter", "salt"},
+        "instructions": "Whisk eggs, melt butter, cook until fluffy, add cheese.",
+        "image": "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Fluffy Pancakes 🥞",
+        "ingredients": {"eggs", "milk", "flour", "butter", "sugar"},
+        "instructions": "Mix dry and wet ingredients separately, combine, and fry in butter.",
+        "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "French Toast 🍞",
+        "ingredients": {"bread", "eggs", "milk", "cinnamon", "butter"},
+        "instructions": "Dip bread in egg/milk mix, fry in butter until golden brown.",
+        "image": "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Oatmeal Bowl 🥣",
+        "ingredients": {"oats", "milk", "honey", "banana", "cinnamon"},
+        "instructions": "Cook oats in milk, top with sliced banana and honey.",
+        "image": "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Yogurt Parfait 🍓",
+        "ingredients": {"yogurt", "granola", "berries", "honey"},
+        "instructions": "Layer yogurt, granola, and fresh berries. Drizzle with honey.",
+        "image": "https://images.unsplash.com/photo-1488477181946-6428a029177b?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Fruit Smoothie 🥤",
+        "ingredients": {"banana", "milk", "honey", "ice"},
+        "instructions": "Blend all ingredients until smooth.",
+        "image": "https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=400&q=80"
+    },
 
-        /* --- Filter Buttons --- */
-        .filters { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
-        .filter-btn {
-            background-color: #e5e7eb; color: #1f2937; border: none;
-            padding: 10px 20px; border-radius: 50px; cursor: pointer;
-            font-weight: 600; font-size: 0.9rem; transition: all 0.2s ease;
-        }
-        .filter-btn:hover { background-color: #d1d5db; transform: translateY(-2px); }
-        .filter-btn.active { background-color: #e63946; color: white; box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3); }
+    # --- LUNCH ---
+    {
+        "name": "Grilled Cheese Sandwich 🥪",
+        "ingredients": {"bread", "cheese", "butter"},
+        "instructions": "Butter bread, place cheese inside, grill until golden.",
+        "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "BLT Sandwich 🥓",
+        "ingredients": {"bread", "bacon", "lettuce", "tomato", "mayo"},
+        "instructions": "Cook bacon, toast bread, layer ingredients with mayo.",
+        "image": "https://images.unsplash.com/photo-1553909489-cd47e3faaefc?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Avocado Toast 🥑",
+        "ingredients": {"bread", "avocado", "salt", "lemon", "oil"},
+        "instructions": "Toast bread, smash avocado on top, season with salt and lemon.",
+        "image": "https://images.unsplash.com/photo-1588137372308-15f75323a557?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Classic Tuna Salad 🐟",
+        "ingredients": {"tuna", "mayo", "onion", "celery", "bread"},
+        "instructions": "Mix tuna, mayo, diced onion and celery. Serve on bread or lettuce.",
+        "image": "https://images.unsplash.com/photo-1550505393-885efce5988d?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Caesar Salad 🥗",
+        "ingredients": {"lettuce", "croutons", "parmesan", "chicken", "dressing"},
+        "instructions": "Toss lettuce with dressing, top with grilled chicken and croutons.",
+        "image": "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Greek Salad 🇬🇷",
+        "ingredients": {"cucumber", "tomato", "feta", "olives", "onion", "oil"},
+        "instructions": "Chop veggies roughly. Toss with olive oil and top with block of feta.",
+        "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Caprese Salad 🇮🇹",
+        "ingredients": {"tomato", "mozzarella", "basil", "oil", "balsamic"},
+        "instructions": "Slice tomatoes and cheese, arrange with basil, drizzle with oil.",
+        "image": "https://images.unsplash.com/photo-1529312266912-b33cf6227e24?auto=format&fit=crop&w=400&q=80"
+    },
 
-        /* --- Grid & Cards --- */
-        .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
-        
-        .recipe-card {
-            background: white; border-radius: 16px; overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex; flex-direction: column;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    # --- DINNER ---
+    {
+        "name": "Tomato Pasta 🍝",
+        "ingredients": {"pasta", "tomato sauce", "garlic", "oil"},
+        "instructions": "Boil pasta, sauté garlic in oil, add sauce, mix.",
+        "image": "https://images.unsplash.com/photo-1626844131082-256783844137?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Garlic Butter Shrimp 🍤",
+        "ingredients": {"shrimp", "butter", "garlic", "lemon", "parsley"},
+        "instructions": "Sauté garlic in butter. Add shrimp, cook 3 mins. Finish with lemon/parsley.",
+        "image": "https://images.unsplash.com/photo-1559742811-822873691df8?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Chicken Stir Fry 🥡",
+        "ingredients": {"chicken", "rice", "soy sauce", "vegetables", "oil"},
+        "instructions": "Cook chicken, add veggies, stir in sauce, serve over rice.",
+        "image": "https://images.unsplash.com/photo-1603133872878-684f10842619?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Beef & Broccoli 🥦",
+        "ingredients": {"beef", "broccoli", "soy sauce", "garlic", "rice", "sugar"},
+        "instructions": "Sear beef strips. Steam broccoli. Toss both in soy/garlic/sugar sauce. Serve over rice.",
+        "image": "https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Spaghetti Carbonara 🇮🇹",
+        "ingredients": {"pasta", "eggs", "cheese", "bacon", "black pepper"},
+        "instructions": "Boil pasta. Fry bacon. Mix eggs and cheese. Toss hot pasta with egg mix (off heat).",
+        "image": "https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Simple Tacos 🌮",
+        "ingredients": {"tortilla", "ground beef", "cheese", "lettuce", "salsa"},
+        "instructions": "Cook meat, fill tortillas, top with cheese and salsa.",
+        "image": "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Chicken Curry 🍛",
+        "ingredients": {"chicken", "curry paste", "coconut milk", "rice", "onion"},
+        "instructions": "Fry onion and chicken, add paste, pour in milk, simmer. Serve with rice.",
+        "image": "https://images.unsplash.com/photo-1631292784640-2b24be784d5d?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Fried Rice 🍚",
+        "ingredients": {"rice", "eggs", "soy sauce", "peas", "carrots", "oil"},
+        "instructions": "Fry veggies, push to side, scramble eggs, add rice and sauce, mix high heat.",
+        "image": "https://images.unsplash.com/photo-1603133872878-684f10842619?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Homemade Pizza 🍕",
+        "ingredients": {"flour", "yeast", "tomato sauce", "cheese", "pepperoni"},
+        "instructions": "Make dough, add sauce and toppings, bake at high heat (450F) for 12 mins.",
+        "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Mac & Cheese 🧀",
+        "ingredients": {"pasta", "cheese", "milk", "butter", "flour"},
+        "instructions": "Make a roux with flour/butter, add milk to thicken, melt cheese in. Pour over cooked pasta.",
+        "image": "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Mushroom Risotto 🍄",
+        "ingredients": {"rice", "mushrooms", "broth", "butter", "parmesan", "onion"},
+        "instructions": "Sauté onions/mushrooms. Toast rice. Add broth ladle by ladle, stirring constantly.",
+        "image": "https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Quesadillas 🧀",
+        "ingredients": {"tortilla", "cheese", "chicken", "onion", "salsa"},
+        "instructions": "Place cheese and chicken on tortilla, fold, fry in pan until crispy.",
+        "image": "https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Mashed Potatoes & Chicken 🍗",
+        "ingredients": {"potatoes", "butter", "milk", "chicken", "salt"},
+        "instructions": "Boil and mash potatoes with butter/milk. Serve with roasted chicken.",
+        "image": "https://images.unsplash.com/photo-1604908177453-7462950a6a3b?auto=format&fit=crop&w=400&q=80"
+    },
+    
+    # --- DESSERT / SNACKS ---
+    {
+        "name": "Banana Bread 🍌",
+        "ingredients": {"banana", "flour", "sugar", "butter", "eggs"},
+        "instructions": "Mash bananas, mix with wet then dry ingredients. Bake 350F for 60 mins.",
+        "image": "https://images.unsplash.com/photo-1596229961623-455b768172c7?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Choc Chip Cookies 🍪",
+        "ingredients": {"flour", "sugar", "butter", "chocolate chips", "eggs", "baking powder"},
+        "instructions": "Cream butter/sugar, add eggs, mix in dry ingredients and chocolate. Bake 350F for 10m.",
+        "image": "https://images.unsplash.com/photo-1499636138143-bd630f5cf386?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Guacamole & Chips 🥑",
+        "ingredients": {"avocado", "onion", "tomato", "lime", "tortilla chips"},
+        "instructions": "Mash avocado with lime and salt. Stir in diced onion/tomato. Serve with chips.",
+        "image": "https://images.unsplash.com/photo-1600850056064-a8b380aff831?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+        "name": "Apple Slices & Peanut Butter 🍎",
+        "ingredients": {"apple", "peanut butter"},
+        "instructions": "Slice apple, dip in peanut butter. Simple and healthy.",
+        "image": "https://images.unsplash.com/photo-1632161845691-32c0211329c4?auto=format&fit=crop&w=400&q=80"
+    }
+]
 
-        .recipe-card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1); }
-        
-        .card-image { width: 100%; height: 200px; object-fit: cover; }
-        .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .recipe-title { font-size: 1.25rem; font-weight: 700; color: #111; margin-bottom: 5px; }
-        
-        .ingredients-match { 
-            font-size: 0.85rem; color: #e63946; font-weight: 600; margin-bottom: 10px; min-height: 20px; 
-        }
+# --- APP LOGIC ---
 
-        .tags-container { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
-        .tag {
-            font-size: 0.75rem; padding: 4px 10px; border-radius: 12px;
-            background-color: #f3f4f6; color: #4b5563; font-weight: 600; text-transform: uppercase;
-        }
-        
-        .description { color: #4b5563; font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
-        .view-btn {
-            padding: 10px; background-color: white; border: 2px solid #e63946;
-            color: #e63946; font-weight: bold; border-radius: 8px;
-            cursor: pointer; transition: all 0.2s; width: 100%; margin-top: auto;
-        }
-        .view-btn:hover { background-color: #e63946; color: white; }
+# 1. Setup ingredients list
+all_possible_ingredients = set()
+for r in recipes:
+    all_possible_ingredients.update(r['ingredients'])
 
-        /* --- Empty State Message --- */
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 50px;
-            color: #9ca3af;
-            font-size: 1.2rem;
-            border: 2px dashed #e5e7eb;
-            border-radius: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Fridge Raider</h1>
-            <p class="subtitle">Tell me what's in your fridge, and I'll show you what to cook.</p>
+sorted_ingredients = sorted(list(all_possible_ingredients))
+
+# 2. Sidebar Controls
+st.sidebar.header("Your Fridge 🧊")
+st.sidebar.write("What do you have today?")
+
+user_ingredients = st.sidebar.multiselect(
+    "Select ingredients:", 
+    options=sorted_ingredients,
+    default=["eggs", "cheese", "butter"]
+)
+user_fridge = set(user_ingredients)
+
+# 3. Find and Display Matches
+st.header("Recommended Recipes:")
+
+# Filter matches first
+matches = []
+for recipe in recipes:
+    required_ingredients = recipe['ingredients']
+    matching_items = user_fridge.intersection(required_ingredients)
+    
+    if len(matching_items) >= 1:
+        matches.append({
+            "recipe": recipe,
+            "matching_items": matching_items,
+            "missing_items": required_ingredients - user_fridge,
+            "match_percent": int((len(matching_items) / len(required_ingredients)) * 100)
+        })
+
+# Sort matches by percentage (highest match first)
+matches.sort(key=lambda x: x['match_percent'], reverse=True)
+
+if not matches:
+    st.warning("No matches yet! Try selecting more ingredients from the sidebar.")
+else:
+    col1, col2 = st.columns(2)
+    
+    for i, item in enumerate(matches):
+        recipe = item['recipe']
+        
+        # Display in alternating columns
+        with (col1 if i % 2 == 0 else col2):
+            st.image(recipe['image'], use_container_width=True)
+            st.subheader(recipe['name'])
             
-            <div class="search-container">
-                <input type="text" id="fridgeInput" class="search-input" placeholder="Type an ingredient (e.g. Chicken, Rice)...">
-            </div>
-        </header>
-
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="Dinner">Dinner</button>
-            <button class="filter-btn" data-filter="Breakfast">Breakfast</button>
-            <button class="filter-btn" data-filter="Lunch">Lunch</button>
-            <button class="filter-btn" data-filter="Dessert">Dessert</button>
-            <button class="filter-btn" data-filter="Healthy">Healthy</button>
-        </div>
-
-        <div class="recipe-grid" id="recipeGrid">
-            <div class="empty-state">
-                Recipes will appear here once you start typing...
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- DATA: ALL 6 RECIPES ---
-        const recipes = [
-            // ORIGINAL 3
-            { 
-                id: 4, 
-                title: "Golden Saffron Risotto", 
-                image: "https://images.unsplash.com/photo-1595908129746-25651b384433?auto=format&fit=crop&w=800&q=80", 
-                tags: ["Dinner", "Vegetarian", "Italian"], 
-                ingredients: ["rice", "arborio", "saffron", "broth", "parmesan", "wine", "butter"],
-                time: "40 mins", 
-                description: "A luxurious, vibrant yellow Italian classic featuring premium saffron threads and parmesan." 
-            },
-            { 
-                id: 5, 
-                title: "Classic Smashburger", 
-                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80", 
-                tags: ["Dinner", "Beef", "American"], 
-                ingredients: ["beef", "ground beef", "cheese", "bun", "bread", "lettuce", "onion"],
-                time: "20 mins", 
-                description: "Crispy edges, juicy center, melted cheese, and toasted brioche buns." 
-            },
-            { 
-                id: 6, 
-                title: "Avocado Toast & Egg", 
-                image: "https://images.unsplash.com/photo-1525351484164-8035a4206501?auto=format&fit=crop&w=800&q=80", 
-                tags: ["Breakfast", "Healthy", "Vegetarian"], 
-                ingredients: ["avocado", "egg", "bread", "toast", "chili", "lemon"],
-                time: "15 mins", 
-                description: "Creamy avocado on sourdough topped with a perfectly runny poached egg and chili flakes." 
-            },
-            // NEW VISUAL 3
-            { 
-                id: 1, 
-                title: "Creamy Tuscan Chicken", 
-                image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=800&q=80", 
-                tags: ["Dinner", "Chicken", "Creamy"], 
-                ingredients: ["chicken", "spinach", "cream", "garlic", "tomato", "parmesan"],
-                time: "30 mins", 
-                description: "Golden chicken breasts in a rich garlic cream sauce with spinach and bursting cherry tomatoes." 
-            },
-            { 
-                id: 2, 
-                title: "Rainbow Poke Bowl", 
-                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80", 
-                tags: ["Lunch", "Healthy", "Seafood"], 
-                ingredients: ["tuna", "salmon", "rice", "mango", "avocado", "cucumber", "mayo"],
-                time: "20 mins", 
-                description: "Fresh tuna, mango, avocado, and spicy mayo arranged in a stunning color wheel over sushi rice." 
-            },
-            { 
-                id: 3, 
-                title: "Blood Orange Galette", 
-                image: "https://images.unsplash.com/photo-1614532661523-86a037b5f134?auto=format&fit=crop&w=800&q=80", 
-                tags: ["Dessert", "Fruit", "Baking"], 
-                ingredients: ["orange", "blood orange", "flour", "pastry", "honey", "thyme", "sugar"],
-                time: "45 mins", 
-                description: "A rustic, sophisticated dessert featuring caramelized blood orange slices and fresh thyme." 
-            }
-        ];
-
-        const grid = document.getElementById('recipeGrid');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const fridgeInput = document.getElementById('fridgeInput');
-
-        // --- RENDER FUNCTION ---
-        function displayRecipes(data) {
-            // 1. If data is empty (no matches found), show message
-            if (data.length === 0) {
-                grid.innerHTML = '<div class="empty-state">No recipes match those ingredients yet! Try "Chicken", "Egg", or "Rice"</div>';
-                return;
-            }
-            // 2. Otherwise, render cards
-            grid.innerHTML = data.map(r => `
-                <article class="recipe-card">
-                    <img src="${r.image}" class="card-image">
-                    <div class="card-content">
-                        <h3 class="recipe-title">${r.title}</h3>
-                        <div class="ingredients-match">Contains: ${r.ingredients.slice(0,3).join(', ')}</div>
-                        <div class="tags-container">${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-                        <p class="description">${r.description}</p>
-                        <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
-                            <span class="time-tag">⏱ ${r.time}</span>
-                            <button class="view-btn">View Recipe</button>
-                        </div>
-                    </div>
-                </article>
-            `).join('');
-        }
-
-        // --- FILTER LOGIC ---
-        function filterAll() {
-            const searchTerm = fridgeInput.value.toLowerCase().trim();
-            const activeCategory = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-
-            // KEY CHANGE: If input is empty, clear the grid
-            if (searchTerm === "") {
-                grid.innerHTML = '<div class="empty-state">Recipes will appear here once you start typing...</div>';
-                return;
-            }
-
-            const filtered = recipes.filter(item => {
-                // 1. Check Category
-                const matchesCategory = (activeCategory === 'all') || item.tags.includes(activeCategory);
+            # Progress bar for match strength
+            st.progress(item['match_percent'], text=f"{item['match_percent']}% Match")
+            
+            if not item['missing_items']:
+                st.success("✅ You have everything!")
+            else:
+                # Show what matches and what is missing
+                st.write(f"**Have:** {', '.join(item['matching_items'])}")
+                st.error(f"**Missing:** {', '.join(item['missing_items'])}")
                 
-                // 2. Check Ingredients (Search)
-                const matchesSearch = item.title.toLowerCase().includes(searchTerm) ||
-                                      item.ingredients.some(ing => ing.toLowerCase().includes(searchTerm));
-                
-                return matchesCategory && matchesSearch;
-            });
-
-            displayRecipes(filtered);
-        }
-
-        // --- EVENT LISTENERS ---
-        
-        // 1. Initial Load: Do NOT show recipes. Show placeholder.
-        grid.innerHTML = '<div class="empty-state">Recipes will appear here once you start typing...</div>';
-
-        // 2. Search Input Listener
-        fridgeInput.addEventListener('input', filterAll);
-
-        // 3. Button Click Listener
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                // Only trigger filter if user has already typed something
-                if (fridgeInput.value.trim() !== "") {
-                    filterAll();
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-"""
-
-# --- 3. Render the HTML in Streamlit ---
-components.html(HTML_CODE, height=1200, scrolling=True)
+            with st.expander("View Instructions"):
+                st.write(recipe['instructions'])
+            
+            st.write("---")
