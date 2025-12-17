@@ -1,183 +1,323 @@
-import streamlit as st
-import time
-
-# --- 1. PAGE CONFIGURATION ---
-st.set_page_config(
-    page_title="Fridge Raider Pro",
-    page_icon="🧊",
-    layout="wide"
-)
-
-# --- 2. THE VISUAL ENGINE (CSS) ---
-st.markdown("""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Recipe Visualizer</title>
     <style>
-    /* 1. BACKGROUND: The Deep Mesh Gradient */
-    .stApp {
-        background-color: #0f172a;
-        background-image: 
-            radial-gradient(at 0% 0%, #4c1d95 0px, transparent 50%),
-            radial-gradient(at 100% 100%, #be185d 0px, transparent 50%),
-            radial-gradient(at 50% 50%, #1e40af 0px, transparent 50%);
-        background-size: 100% 100%;
-        background-attachment: fixed;
-    }
+        /* --- 1. Global Styles & Reset --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    /* 2. TEXT: Make everything White & Readable */
-    h1, h2, h3, p, span, div, label {
-        color: white !important;
-        font-family: 'Helvetica Neue', sans-serif;
-    }
+        body {
+            background-color: #f9fafb; /* Very light grey background */
+            color: #1f2937;
+            line-height: 1.6;
+        }
 
-    /* 3. SIDEBAR: Frosted Glass Effect */
-    [data-testid="stSidebar"] {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        backdrop-filter: blur(20px);
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-    /* 4. CARDS: The "Recipe" Containers */
-    div.stExpander {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* 5. BUTTONS: Make them POP (White vs Purple) */
-    .stButton > button {
-        background-color: white !important;
-        color: #4c1d95 !important; /* Purple Text */
-        font-weight: bold !important;
-        border-radius: 10px !important;
-        border: none !important;
-        transition: transform 0.1s ease-in-out;
-    }
-    .stButton > button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-    }
+        /* --- 2. Header --- */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
 
-    /* 6. METRICS: Gold Colors for Stats */
-    div[data-testid="stMetricValue"] {
-        color: #fbbf24 !important; /* Amber-400 */
-        font-size: 2.5rem !important;
-    }
+        h1 {
+            font-size: 2.5rem;
+            color: #111;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        /* --- 3. Filter Buttons (FIXED FOR READABILITY) --- */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            /* High contrast: Light grey background, Dark text */
+            background-color: #e5e7eb; 
+            color: #1f2937; 
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #d1d5db; /* Slightly darker grey on hover */
+            transform: translateY(-2px);
+        }
+
+        /* Active State: Red background, White text */
+        .filter-btn.active {
+            background-color: #e63946;
+            color: white;
+            box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+        }
+
+        /* --- 4. Recipe Grid --- */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* --- 5. Recipe Card Styling --- */
+        .recipe-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .recipe-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .time-tag {
+            font-size: 0.85rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+        }
+
+        .tags-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background-color: #f3f4f6;
+            color: #4b5563;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .description {
+            color: #4b5563;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .view-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: white;
+            border: 2px solid #e63946;
+            color: #e63946;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            background-color: #e63946;
+            color: white;
+        }
+
+        /* --- Responsive Tweaks --- */
+        @media (max-width: 600px) {
+            .filters {
+                gap: 8px;
+            }
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
     </style>
-""", unsafe_allow_html=True)
+</head>
+<body>
 
-# --- 3. GAMIFICATION STATE ---
-if 'streak' not in st.session_state:
-    st.session_state.streak = 3
-if 'xp' not in st.session_state:
-    st.session_state.xp = 150
+    <div class="container">
+        <header>
+            <h1>Culinary Canvas</h1>
+            <p class="subtitle">Visually stunning recipes for every palate</p>
+        </header>
 
-def cook_action():
-    st.session_state.streak += 1
-    st.session_state.xp += 50
-    st.balloons()
-    st.toast("🔥 Delicious! +50 XP Earned!")
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All Recipes</button>
+            <button class="filter-btn" data-filter="Dinner">Dinner</button>
+            <button class="filter-btn" data-filter="Breakfast">Breakfast</button>
+            <button class="filter-btn" data-filter="Lunch">Lunch</button>
+            <button class="filter-btn" data-filter="Dessert">Dessert</button>
+            <button class="filter-btn" data-filter="Healthy">Healthy</button>
+        </div>
 
-# --- 4. RECIPE DATA ---
-recipes = [
-    {
-        "name": "Classic Omelette 🍳",
-        "ingredients": {"eggs", "cheese", "butter", "salt"},
-        "instructions": "Whisk eggs, melt butter, cook until fluffy, add cheese.",
-        "image": "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-        "name": "Fluffy Pancakes 🥞",
-        "ingredients": {"eggs", "milk", "flour", "butter", "sugar"},
-        "instructions": "Mix dry and wet ingredients separately, combine, and fry in butter.",
-        "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-        "name": "Avocado Toast 🥑",
-        "ingredients": {"bread", "avocado", "salt", "lemon", "oil"},
-        "instructions": "Toast bread, smash avocado on top, season with salt and lemon.",
-        "image": "https://images.unsplash.com/photo-1588137372308-15f75323a557?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-        "name": "Grilled Cheese 🥪",
-        "ingredients": {"bread", "cheese", "butter"},
-        "instructions": "Butter bread, place cheese inside, grill until golden.",
-        "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-        "name": "Fruit Smoothie 🥤",
-        "ingredients": {"banana", "milk", "honey", "ice"},
-        "instructions": "Blend all ingredients until smooth.",
-        "image": "https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-        "name": "Pasta Pomodoro 🍝",
-        "ingredients": {"pasta", "tomato sauce", "garlic", "oil"},
-        "instructions": "Boil pasta. Sauté garlic in oil, add sauce, mix with pasta.",
-        "image": "https://images.unsplash.com/photo-1626844131082-256783844137?auto=format&fit=crop&w=400&q=80"
-    }
-]
+        <div class="recipe-grid" id="recipeGrid">
+            </div>
+    </div>
 
-# --- 5. SIDEBAR (THE FRIDGE) ---
-st.sidebar.title("🧊 Fridge Raider")
-st.sidebar.markdown("Select what you have in your kitchen:")
+    <script>
+        // --- 1. Recipe Data (Enhanced with 6 visually distinct items) ---
+        const recipes = [
+            {
+                id: 1,
+                title: "Creamy Tuscan Chicken",
+                image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=800&q=80",
+                tags: ["Dinner", "Chicken", "Creamy"],
+                time: "30 mins",
+                description: "Golden chicken breasts in a rich garlic cream sauce with spinach and bursting cherry tomatoes."
+            },
+            {
+                id: 2,
+                title: "Rainbow Poke Bowl",
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80",
+                tags: ["Lunch", "Healthy", "Seafood"],
+                time: "20 mins",
+                description: "Fresh tuna, mango, avocado, and spicy mayo arranged in a stunning color wheel over sushi rice."
+            },
+            {
+                id: 3,
+                title: "Blood Orange Galette",
+                image: "https://images.unsplash.com/photo-1614532661523-86a037b5f134?auto=format&fit=crop&w=800&q=80",
+                tags: ["Dessert", "Fruit", "Baking"],
+                time: "45 mins",
+                description: "A rustic, sophisticated dessert featuring caramelized blood orange slices and fresh thyme."
+            },
+            {
+                id: 4,
+                title: "Golden Saffron Risotto",
+                image: "https://images.unsplash.com/photo-1595908129746-25651b384433?auto=format&fit=crop&w=800&q=80",
+                tags: ["Dinner", "Vegetarian", "Italian"],
+                time: "40 mins",
+                description: "A luxurious, vibrant yellow Italian classic featuring premium saffron threads and parmesan."
+            },
+            {
+                id: 5,
+                title: "Classic Smashburger",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
+                tags: ["Dinner", "Beef", "American"],
+                time: "20 mins",
+                description: "Crispy edges, juicy center, melted cheese, and toasted brioche buns. The ultimate comfort food."
+            },
+            {
+                id: 6,
+                title: "Avocado Toast & Poached Egg",
+                image: "https://images.unsplash.com/photo-1525351484164-8035a4206501?auto=format&fit=crop&w=800&q=80",
+                tags: ["Breakfast", "Healthy", "Vegetarian"],
+                time: "15 mins",
+                description: "Creamy avocado on sourdough topped with a perfectly runny poached egg and chili flakes."
+            }
+        ];
 
-all_possible_ingredients = set()
-for r in recipes:
-    all_possible_ingredients.update(r['ingredients'])
-sorted_ingredients = sorted(list(all_possible_ingredients))
+        // --- 2. DOM Elements ---
+        const grid = document.getElementById('recipeGrid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
 
-user_ingredients = st.sidebar.multiselect(
-    "Ingredients:", 
-    options=sorted_ingredients,
-    default=["eggs", "cheese", "butter", "bread"]
-)
-user_fridge = set(user_ingredients)
+        // --- 3. Functions ---
 
-# --- 6. MAIN DASHBOARD ---
-# Header Area
-col1, col2, col3 = st.columns([3, 1, 1])
-with col1:
-    st.title("What's Cooking?")
-    st.caption(f"We found recipes based on your **{len(user_fridge)} ingredients**.")
-with col2:
-    st.metric("🔥 Streak", f"{st.session_state.streak} Days")
-with col3:
-    st.metric("✨ XP", st.session_state.xp)
+        // Function to generate HTML for cards
+        function displayRecipes(recipesToShow) {
+            grid.innerHTML = recipesToShow.map(recipe => {
+                // Create HTML for tags pill badges
+                const tagsHtml = recipe.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+                
+                return `
+                    <article class="recipe-card">
+                        <img src="${recipe.image}" alt="${recipe.title}" class="card-image">
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="recipe-title">${recipe.title}</h3>
+                            </div>
+                            <div class="tags-container">
+                                ${tagsHtml}
+                            </div>
+                            <p class="description">${recipe.description}</p>
+                            <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+                                <span class="time-tag">⏱ ${recipe.time}</span>
+                                <button class="view-btn">View Recipe</button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
 
-st.markdown("---")
-
-# --- 7. RECIPE GRID LOGIC ---
-found_match = False
-cols = st.columns(3) # Create a 3-column grid layout
-
-for i, recipe in enumerate(recipes):
-    required_ingredients = recipe['ingredients']
-    matching_items = user_fridge.intersection(required_ingredients)
-    
-    # Logic: Show if we have at least 1 matching ingredient
-    if len(matching_items) >= 1:
-        found_match = True
-        missing = required_ingredients - user_fridge
+        // --- 4. Event Listeners ---
         
-        # Determine which column to place this card in (0, 1, or 2)
-        with cols[i % 3]:
-            # The "Card" UI
-            with st.expander(f"{recipe['name']}", expanded=True):
-                st.image(recipe['image'], use_container_width=True)
-                
-                # Match Percentage Bar
-                match_percent = int((len(matching_items) / len(required_ingredients)) * 100)
-                
-                if not missing:
-                    st.progress(100, "100% Match!")
-                    st.success("You have everything!")
-                    if st.button("I Cooked This", key=f"btn_{i}"):
-                        cook_action()
-                else:
-                    st.progress(match_percent, f"{match_percent}% Match")
-                    st.markdown(f"**Missing:** {', '.join(missing)}")
-                    st.button("Add to Shopping List", key=f"shop_{i}")
+        // Initial Load
+        displayRecipes(recipes);
 
-if not found_match:
-    st.warning("No matches found! Try adding more ingredients in the sidebar.")
+        // Filter Click Logic
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                if (filterValue === 'all') {
+                    displayRecipes(recipes);
+                } else {
+                    // Filter array based on tags
+                    const filtered = recipes.filter(recipe => recipe.tags.includes(filterValue));
+                    displayRecipes(filtered);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
