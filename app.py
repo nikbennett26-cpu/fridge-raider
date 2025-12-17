@@ -1,24 +1,28 @@
-from flask import Flask, render_template_string
+import streamlit as st
+import streamlit.components.v1 as components
 
-app = Flask(__name__)
+# --- 1. Set up the Streamlit Page ---
+st.set_page_config(page_title="Gourmet Recipe Visualizer", layout="wide")
 
-# We store the HTML inside this Python string
+# --- 2. Define the HTML/CSS/JS Logic ---
 HTML_CODE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gourmet Recipe Visualizer</title>
     <style>
+        /* --- Global & Reset --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: #f9fafb; color: #1f2937; line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-        header { text-align: center; margin-bottom: 50px; }
+        
+        /* --- Container & Layout --- */
+        .container { max-width: 100%; margin: 0 auto; padding: 20px; }
+        header { text-align: center; margin-bottom: 40px; }
         h1 { font-size: 2.5rem; color: #111; margin-bottom: 10px; }
         .subtitle { color: #6b7280; font-size: 1.1rem; }
         
-        /* Filter Buttons */
+        /* --- Filter Buttons --- */
         .filters { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
         .filter-btn {
             background-color: #e5e7eb; color: #1f2937; border: none;
@@ -28,8 +32,10 @@ HTML_CODE = """
         .filter-btn:hover { background-color: #d1d5db; transform: translateY(-2px); }
         .filter-btn.active { background-color: #e63946; color: white; box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3); }
 
-        /* Grid & Cards */
+        /* --- Grid --- */
         .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        
+        /* --- Card --- */
         .recipe-card {
             background: white; border-radius: 16px; overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -40,17 +46,22 @@ HTML_CODE = """
         .card-image { width: 100%; height: 220px; object-fit: cover; }
         .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .recipe-title { font-size: 1.25rem; font-weight: 700; color: #111; margin-bottom: 10px; }
+        
+        /* Tags */
         .tags-container { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
         .tag {
             font-size: 0.75rem; padding: 4px 10px; border-radius: 12px;
             background-color: #f3f4f6; color: #4b5563; font-weight: 600; text-transform: uppercase;
         }
+        
         .description { color: #4b5563; font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
         .time-tag { font-size: 0.85rem; color: #6b7280; }
+        
+        /* View Button */
         .view-btn {
             padding: 10px; background-color: white; border: 2px solid #e63946;
             color: #e63946; font-weight: bold; border-radius: 8px;
-            cursor: pointer; transition: all 0.2s; width: 100%;
+            cursor: pointer; transition: all 0.2s; width: 100%; margin-top: auto;
         }
         .view-btn:hover { background-color: #e63946; color: white; }
     </style>
@@ -61,6 +72,7 @@ HTML_CODE = """
             <h1>Culinary Canvas</h1>
             <p class="subtitle">Visually stunning recipes for every palate</p>
         </header>
+
         <div class="filters">
             <button class="filter-btn active" data-filter="all">All Recipes</button>
             <button class="filter-btn" data-filter="Dinner">Dinner</button>
@@ -69,6 +81,7 @@ HTML_CODE = """
             <button class="filter-btn" data-filter="Dessert">Dessert</button>
             <button class="filter-btn" data-filter="Healthy">Healthy</button>
         </div>
+
         <div class="recipe-grid" id="recipeGrid"></div>
     </div>
 
@@ -117,9 +130,7 @@ HTML_CODE = """
 </html>
 """
 
-@app.route('/')
-def home():
-    return render_template_string(HTML_CODE)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+# --- 3. Render the HTML in Streamlit ---
+# We use 'scrolling=True' so you can scroll inside the component if needed
+# We set a large height (1200) to ensure the grid is visible
+components.html(HTML_CODE, height=1200, scrolling=True)
