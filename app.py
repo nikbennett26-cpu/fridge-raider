@@ -71,9 +71,51 @@ st.write("Enter the ingredients you already have at home, and we'll find the per
 # --- LOGIC ---
 NON_VEGAN_ITEMS = {"eggs", "cheese", "butter", "milk", "chicken", "beef", "bacon", "tuna", "salmon", "shrimp", "honey", "cream cheese", "yogurt", "mayo", "ground beef", "parmesan", "mozzarella", "feta"}
 
-# --- THE RECIPE DATABASE (With One Pot Tags) ---
+# --- THE RECIPE DATABASE ---
 recipes = [
     # --- 1. EMPTY FRIDGE / PANTRY STAPLES ---
+    {
+        "name": "Beans on Toast 🇬🇧",
+        "ingredients": {"bread", "baked beans", "butter"},
+        "instructions": "Toast the bread. Microwave or heat beans on stove. Butter toast heavily. Pour beans over.",
+        "image": "https://images.unsplash.com/photo-1629249722336-9b575306642d?auto=format&fit=crop&w=600&q=80",
+        "time": "5 mins", "calories": "350 kcal", "one_pot": True
+    },
+    {
+        "name": "Cheese Quesadilla 🧀",
+        "ingredients": {"tortilla", "cheese", "butter"},
+        "instructions": "Melt butter in pan. Add tortilla. Sprinkle cheese. Fold in half. Cook until crispy and melted.",
+        "image": "https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&w=600&q=80",
+        "time": "5 mins", "calories": "320 kcal", "one_pot": True
+    },
+    {
+        "name": "Tuna Pasta 🐟",
+        "ingredients": {"pasta", "tuna", "mayo", "corn", "black pepper"},
+        "instructions": "Boil pasta. Drain. Mix in canned tuna, mayo, and corn while hot. Season generously.",
+        "image": "https://images.unsplash.com/photo-1594969242588-466d77344933?auto=format&fit=crop&w=600&q=80",
+        "time": "12 mins", "calories": "450 kcal", "one_pot": True
+    },
+    {
+        "name": "Jacket Potato 🥔",
+        "ingredients": {"potatoes", "butter", "cheese", "salt", "pepper"},
+        "instructions": "Prick potato. Microwave 5-8 mins until soft. Cut open, fluff inside, add butter and cheese.",
+        "image": "https://images.unsplash.com/photo-1623961990059-28356e22bc8e?auto=format&fit=crop&w=600&q=80",
+        "time": "10 mins", "calories": "300 kcal", "one_pot": True
+    },
+    {
+        "name": "Cinnamon Sugar Toast 🍞",
+        "ingredients": {"bread", "butter", "sugar", "cinnamon"},
+        "instructions": "Toast bread. Butter immediately. Sprinkle heavily with sugar and cinnamon mix.",
+        "image": "https://images.unsplash.com/photo-1542525716-1e52ce24e2c0?auto=format&fit=crop&w=600&q=80",
+        "time": "3 mins", "calories": "200 kcal", "one_pot": True
+    },
+    {
+        "name": "Peanut Butter & Banana 🍌",
+        "ingredients": {"bread", "peanut butter", "banana"},
+        "instructions": "Toast bread. Spread peanut butter. Top with sliced banana. Optional: Drizzle honey.",
+        "image": "https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c?auto=format&fit=crop&w=600&q=80",
+        "time": "3 mins", "calories": "350 kcal", "one_pot": True
+    },
     {
         "name": "Buttered Sweet Corn 🌽",
         "ingredients": {"corn", "butter", "salt", "pepper"},
