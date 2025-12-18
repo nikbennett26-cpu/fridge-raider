@@ -13,16 +13,16 @@ with st.sidebar:
 
 # --- DEFINE CSS THEMES ---
 
-# 1. LIGHT THEME
+# 1. LIGHT THEME (High Definition Cards)
 light_theme_css = """
 <style>
     :root { color-scheme: light; }
-    .stApp { background-color: #f8fafc !important; }
+    .stApp { background-color: #f0f2f6 !important; }
     
     /* Text Colors */
     h1, h2, h3, h4, h5, h6, p, div, span, label, li, textarea, .stMarkdown {
-        color: #334155 !important;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #1e293b !important; /* Dark Slate for readability */
+        font-family: 'Inter', sans-serif;
     }
     
     /* Sidebar */
@@ -35,39 +35,40 @@ light_theme_css = """
         border: 1px solid #cbd5e1;
     }
     
-    /* Header Gradient */
-    h1 {
-        background: -webkit-linear-gradient(45deg, #0d9488, #3b82f6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    
-    /* Tabs */
+    /* Tabs (Clean Underline Style) */
     .stTabs [data-baseweb="tab"] {
-        background-color: #ffffff;
-        border: 1px solid #e2e8f0;
-        color: #475569;
+        background-color: transparent;
+        border: none;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 1rem;
     }
-    .stTabs [aria-selected="true"] { background-color: #0d9488 !important; color: white !important; }
+    .stTabs [aria-selected="true"] { 
+        background-color: transparent !important; 
+        color: #0d9488 !important; /* Teal Text */
+        border-bottom: 3px solid #0d9488 !important; /* Teal Line */
+    }
     
-    /* Card Design (Light) */
+    /* --- CARD DESIGN (Light Mode) --- */
     [data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #ffffff;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 12px !important;
-        padding: 16px !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease;
+        border: 1px solid #cbd5e1 !important; /* Visible Darker Border */
+        border-top: 5px solid #0d9488 !important; /* Teal Top Accent */
+        border-radius: 8px !important;
+        padding: 20px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Deep Shadow */
+        transition: all 0.2s ease-in-out;
     }
+    
     [data-testid="stVerticalBlockBorderWrapper"]:hover {
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         border-color: #94a3b8 !important;
     }
 
     /* Badges */
-    .have-tag { background-color: #d1fae5; color: #065f46; border: 1px solid #34d399; }
-    .missing-tag { background-color: #f1f5f9; color: #64748b; border: 1px dashed #cbd5e1; }
-    .sidebar-tag { background-color: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .have-tag { background-color: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+    .missing-tag { background-color: #f1f5f9; color: #64748b; border: 1px dashed #94a3b8; }
 </style>
 """
 
@@ -79,8 +80,8 @@ dark_theme_css = """
     
     /* Text Colors */
     h1, h2, h3, h4, h5, h6, p, div, span, label, li, textarea, .stMarkdown {
-        color: #f1f5f9 !important;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #f8fafc !important;
+        font-family: 'Inter', sans-serif;
     }
     
     /* Sidebar */
@@ -89,44 +90,37 @@ dark_theme_css = """
     /* Inputs */
     .stTextArea textarea {
         background-color: #1e293b !important;
-        color: #f1f5f9 !important;
+        color: #f8fafc !important;
         border: 1px solid #475569;
-    }
-    .stTextArea label { color: #38bdf8 !important; }
-    
-    /* Header Gradient */
-    h1 {
-        background: -webkit-linear-gradient(45deg, #2dd4bf, #818cf8);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
     }
     
     /* Tabs */
-    .stTabs [data-baseweb="tab"] {
-        background-color: #1e293b;
-        border: 1px solid #334155;
-        color: #94a3b8;
+    .stTabs [data-baseweb="tab"] { background-color: transparent; border: none; color: #94a3b8; }
+    .stTabs [aria-selected="true"] { 
+        background-color: transparent !important; 
+        color: #2dd4bf !important; 
+        border-bottom: 3px solid #2dd4bf !important;
     }
-    .stTabs [aria-selected="true"] { background-color: #2dd4bf !important; color: #0f172a !important; }
     
-    /* Card Design (Dark) */
+    /* --- CARD DESIGN (Dark Mode) --- */
     [data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #1e293b;
         border: 1px solid #334155 !important;
-        border-radius: 12px !important;
-        padding: 16px !important;
-        transition: transform 0.2s ease;
+        border-top: 5px solid #2dd4bf !important; /* Cyan Top Accent */
+        border-radius: 8px !important;
+        padding: 20px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     }
+    
     [data-testid="stVerticalBlockBorderWrapper"]:hover {
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        background-color: #263345;
         border-color: #475569 !important;
-        background-color: #253347;
     }
 
     /* Badges */
     .have-tag { background-color: #064e3b; color: #a7f3d0; border: 1px solid #059669; }
     .missing-tag { background-color: #334155; color: #94a3b8; border: 1px dashed #475569; }
-    .sidebar-tag { background-color: #0c4a6e; color: #bae6fd; border: 1px solid #0284c7; }
     
     /* Icons/Containers */
     button[kind="header"] { color: white !important; }
@@ -143,24 +137,30 @@ else:
 # --- GLOBAL STYLES ---
 st.markdown("""
 <style>
-    .have-tag, .missing-tag, .sidebar-tag {
-        padding: 3px 8px;
+    .have-tag, .missing-tag {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
+        margin: 3px;
+    }
+    h3 {
+        font-weight: 800 !important;
+        font-size: 1.4rem !important;
+        margin-bottom: 0.5rem !important;
+        padding-top: 0 !important;
+    }
+    .sidebar-tag {
+        background-color: #e0f2fe; 
+        color: #0369a1; 
+        border: 1px solid #7dd3fc;
+        padding: 4px 8px;
         border-radius: 6px;
         font-size: 0.8rem;
         font-weight: 600;
         display: inline-block;
         margin: 2px;
-    }
-    h3 {
-        padding-top: 0px !important;
-        margin-bottom: 5px !important;
-        font-size: 1.3rem !important;
-        font-weight: 700 !important;
-    }
-    .recipe-stats {
-        font-size: 0.9rem;
-        opacity: 0.8;
-        margin-bottom: 10px;
     }
 </style>
 """, unsafe_allow_html=True)
