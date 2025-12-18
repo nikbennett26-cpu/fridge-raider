@@ -13,62 +13,80 @@ with st.sidebar:
 
 # --- DEFINE CSS THEMES ---
 
-# 1. LIGHT THEME (High Definition Cards)
+# 1. LIGHT THEME (Modern "Pop" UI)
 light_theme_css = """
 <style>
     :root { color-scheme: light; }
-    .stApp { background-color: #f0f2f6 !important; }
+    .stApp { background-color: #f0f4f8 !important; } /* Slightly cooler grey background */
     
     /* Text Colors */
     h1, h2, h3, h4, h5, h6, p, div, span, label, li, textarea, .stMarkdown {
-        color: #1e293b !important; /* Dark Slate for readability */
-        font-family: 'Inter', sans-serif;
+        color: #1e293b !important;
+        font-family: 'Inter', system-ui, sans-serif;
     }
     
     /* Sidebar */
-    section[data-testid="stSidebar"] { background-color: #ffffff !important; border-right: 1px solid #e2e8f0; }
+    section[data-testid="stSidebar"] { background-color: #ffffff !important; border-right: none; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
     
     /* Inputs */
     .stTextArea textarea {
-        background-color: #ffffff !important;
-        color: #334155 !important;
-        border: 1px solid #cbd5e1;
+        background-color: #f8fafc !important;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
     }
+    .stTextArea textarea:focus { border-color: #0d9488 !important; }
     
-    /* Tabs (Clean Underline Style) */
+    /* --- TABS (The "Pill" Style - No Underline) --- */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px; /* Space between tabs */
+        margin-bottom: 16px;
+    }
     .stTabs [data-baseweb="tab"] {
         background-color: transparent;
-        border: none;
+        border: 2px solid transparent; /* Reserve space for no jumping */
         color: #64748b;
         font-weight: 600;
-        font-size: 1rem;
+        border-radius: 50px; /* Pill shape */
+        padding: 6px 16px;
+        transition: all 0.2s ease;
     }
     .stTabs [aria-selected="true"] { 
-        background-color: transparent !important; 
-        color: #0d9488 !important; /* Teal Text */
-        border-bottom: 3px solid #0d9488 !important; /* Teal Line */
+        background-color: #e0f2fe !important; /* Light blue pill bg */
+        color: #0369a1 !important; /* Dark blue text */
+        border: 2px solid #bae6fd !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .stTabs [data-baseweb="tab"]:hover:not([aria-selected="true"]) {
+         background-color: #f1f5f9;
+         color: #334155;
     }
     
-    /* --- CARD DESIGN (Light Mode) --- */
+    /* --- CARD DESIGN (Stand Out!) --- */
     [data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #ffffff;
-        border: 1px solid #cbd5e1 !important; /* Visible Darker Border */
-        border-top: 5px solid #0d9488 !important; /* Teal Top Accent */
-        border-radius: 8px !important;
-        padding: 20px !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Deep Shadow */
-        transition: all 0.2s ease-in-out;
+        /* Thicker, clearer border */
+        border: 2px solid #e2e8f0 !important;
+        /* Keep the accent, but make it a gradient strip */
+        border-top: 6px solid #0d9488 !important; 
+        /* Much rounder corners */
+        border-radius: 20px !important;
+        /* More breathing room */
+        padding: 24px !important;
+        /* Deep, soft shadow for "lift" */
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     [data-testid="stVerticalBlockBorderWrapper"]:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        border-color: #94a3b8 !important;
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.15), 0 10px 15px -5px rgba(0, 0, 0, 0.1) !important;
+        border-top-color: #3b82f6 !important; /* Color shift on hover */
     }
 
     /* Badges */
-    .have-tag { background-color: #d1fae5; color: #065f46; border: 1px solid #10b981; }
-    .missing-tag { background-color: #f1f5f9; color: #64748b; border: 1px dashed #94a3b8; }
+    .have-tag { background-color: #dcfce7; color: #14532d; border: 1px solid #86efac; font-weight: 700; }
+    .missing-tag { background-color: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
 </style>
 """
 
@@ -76,51 +94,62 @@ light_theme_css = """
 dark_theme_css = """
 <style>
     :root { color-scheme: dark; }
-    .stApp { background-color: #0f172a !important; }
+    .stApp { background-color: #0b1120 !important; }
     
     /* Text Colors */
     h1, h2, h3, h4, h5, h6, p, div, span, label, li, textarea, .stMarkdown {
-        color: #f8fafc !important;
-        font-family: 'Inter', sans-serif;
+        color: #e2e8f0 !important;
+        font-family: 'Inter', system-ui, sans-serif;
     }
     
     /* Sidebar */
-    section[data-testid="stSidebar"] { background-color: #1e293b !important; border-right: 1px solid #334155; }
+    section[data-testid="stSidebar"] { background-color: #111827 !important; border-right: 1px solid #1f2937; }
     
     /* Inputs */
     .stTextArea textarea {
-        background-color: #1e293b !important;
-        color: #f8fafc !important;
-        border: 1px solid #475569;
+        background-color: #1f2937 !important;
+        color: #e2e8f0 !important;
+        border: 2px solid #374151;
+        border-radius: 12px;
     }
     
-    /* Tabs */
-    .stTabs [data-baseweb="tab"] { background-color: transparent; border: none; color: #94a3b8; }
+    /* --- TABS (Dark Pill Style) --- */
+    .stTabs [data-baseweb="tab-list"] { gap: 8px; margin-bottom: 16px; }
+    .stTabs [data-baseweb="tab"] {
+        background-color: transparent;
+        border: 2px solid transparent;
+        color: #9ca3af;
+        font-weight: 600;
+        border-radius: 50px;
+        padding: 6px 16px;
+    }
     .stTabs [aria-selected="true"] { 
-        background-color: transparent !important; 
-        color: #2dd4bf !important; 
-        border-bottom: 3px solid #2dd4bf !important;
+        background-color: #1e293b !important;
+        color: #2dd4bf !important;
+        border: 2px solid #2dd4bf !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
     }
     
-    /* --- CARD DESIGN (Dark Mode) --- */
+    /* --- CARD DESIGN (Dark Stand Out) --- */
     [data-testid="stVerticalBlockBorderWrapper"] {
-        background-color: #1e293b;
-        border: 1px solid #334155 !important;
-        border-top: 5px solid #2dd4bf !important; /* Cyan Top Accent */
-        border-radius: 8px !important;
-        padding: 20px !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        background-color: #1f2937;
+        border: 2px solid #374151 !important;
+        border-top: 6px solid #2dd4bf !important;
+        border-radius: 20px !important;
+        padding: 24px !important;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     [data-testid="stVerticalBlockBorderWrapper"]:hover {
-        transform: translateY(-3px);
-        background-color: #263345;
-        border-color: #475569 !important;
+        transform: translateY(-5px) scale(1.01);
+        background-color: #273548;
+        box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.6);
     }
 
     /* Badges */
-    .have-tag { background-color: #064e3b; color: #a7f3d0; border: 1px solid #059669; }
-    .missing-tag { background-color: #334155; color: #94a3b8; border: 1px dashed #475569; }
+    .have-tag { background-color: #065f46; color: #d1fae5; border: 1px solid #059669; font-weight: 700; }
+    .missing-tag { background-color: #374151; color: #9ca3af; border: 1px solid #4b5563; }
     
     /* Icons/Containers */
     button[kind="header"] { color: white !important; }
@@ -140,16 +169,25 @@ st.markdown("""
     .have-tag, .missing-tag {
         padding: 4px 10px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 600;
         display: inline-block;
         margin: 3px;
+        letter-spacing: 0.5px;
     }
     h3 {
         font-weight: 800 !important;
-        font-size: 1.4rem !important;
-        margin-bottom: 0.5rem !important;
+        font-size: 1.5rem !important;
+        margin-bottom: 0.2rem !important;
         padding-top: 0 !important;
+        letter-spacing: -0.5px;
+    }
+    .recipe-time {
+        font-size: 0.9rem;
+        font-weight: 600;
+        opacity: 0.7;
+        margin-bottom: 12px;
+        display: block;
     }
     .sidebar-tag {
         background-color: #e0f2fe; 
@@ -724,7 +762,7 @@ def render_recipes(filter_mode="all"):
         with (col1 if i % 2 == 0 else col2):
             with st.container(border=True):
                 st.subheader(recipe['name'])
-                st.markdown(f'<div class="recipe-stats">⏱️ {recipe.get("time", "--")}</div>', unsafe_allow_html=True)
+                st.markdown(f'<span class="recipe-time">⏱️ {recipe.get("time", "--")}</span>', unsafe_allow_html=True)
                 
                 if item['match_percent'] == 100:
                     st.progress(item['match_percent'], text="🔥 Perfect Match!")
