@@ -3,21 +3,21 @@ import streamlit as st
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Fridge Raider v3 Pro", layout="wide")
 
-# --- PROFESSIONAL CSS (MOBILE & DARK MODE FIX) ---
+# --- PROFESSIONAL CSS (MOBILE FIX: DARK MENU / WHITE TEXT) ---
 st.markdown("""
 <style>
-    /* 1. FORCE BROWSER LIGHT MODE RENDERING */
+    /* 1. FORCE BROWSER LIGHT MODE RENDERING FOR MAIN APP */
     :root {
         color-scheme: light;
     }
     
-    /* 2. MAIN BACKGROUND */
+    /* 2. MAIN BACKGROUND - Soft Off-White */
     .stApp {
         background-color: #f3f4f6 !important;
         background-image: none !important;
     }
 
-    /* 3. TEXT COLOR - Force Dark Grey */
+    /* 3. MAIN TEXT COLOR - Dark Grey */
     h1, h2, h3, h4, h5, h6, p, div, span, label, li {
         color: #1f2937 !important;
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -29,48 +29,43 @@ st.markdown("""
         border-right: 1px solid #e5e7eb;
     }
     
-    /* --- 5. THE DROPDOWN FIX (NUCLEAR OPTION) --- */
+    /* --- 5. THE DROPDOWN FIX (HIGH CONTRAST DARK MODE) --- */
     
-    /* Target the floating popover container itself */
-    div[data-baseweb="popover"] {
-        background-color: #ffffff !important;
-        border: 1px solid #e5e7eb;
+    /* Force the dropdown container to be Dark (matching your phone) */
+    div[data-baseweb="popover"], div[data-baseweb="popover"] > div {
+        background-color: #111111 !important;
+        border: 1px solid #333333 !important;
     }
     
-    /* Target the list inside the popover */
+    /* The List inside */
     ul[data-baseweb="menu"] {
-        background-color: #ffffff !important;
+        background-color: #111111 !important;
     }
     
-    /* Target the options (items) inside the list */
+    /* The Options (Items) - FORCE WHITE TEXT */
     li[data-baseweb="option"] {
-        background-color: #ffffff !important; /* Force white background */
-        color: #1f2937 !important;            /* Force dark text */
+        background-color: #111111 !important;
+        color: #ffffff !important; /* Bright White Text */
     }
     
-    /* Hover/Selection State */
-    li[data-baseweb="option"]:hover, li[data-baseweb="option"][aria-selected="true"] {
-        background-color: #eff6ff !important;
-        color: #2563eb !important;
+    /* Force any spans inside options to be white too */
+    li[data-baseweb="option"] span {
+        color: #ffffff !important;
     }
-
-    /* The Input Box (where you type) */
+    
+    /* Hover/Selection State - Blue with White Text */
+    li[data-baseweb="option"]:hover, li[data-baseweb="option"][aria-selected="true"] {
+        background-color: #2563eb !important;
+        color: #ffffff !important;
+    }
+    
+    /* The Input Box (Before clicking) - Keep White */
     div[data-baseweb="select"] > div {
         background-color: #ffffff !important;
         color: #1f2937 !important;
         border: 1px solid #d1d5db;
     }
     
-    /* Text inside the input box */
-    div[data-baseweb="select"] span {
-        color: #1f2937 !important;
-    }
-    
-    /* The 'X' and Arrow icons */
-    div[data-baseweb="select"] svg {
-        fill: #6b7280 !important;
-    }
-
     /* --- END OF FIX --- */
 
     /* 6. HEADER STYLING */
@@ -107,7 +102,7 @@ st.markdown("""
         border: 1px dashed #d1d5db;
     }
     
-    /* Sidebar Tags */
+    /* Sidebar Tags (Selected Items) */
     span[data-baseweb="tag"] {
         background-color: #eff6ff !important;
         border: 1px solid #bfdbfe;
