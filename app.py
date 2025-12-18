@@ -59,9 +59,6 @@ st.markdown("""
         color: #1f2937 !important;
         border: 1px solid #d1d5db;
     }
-    div[data-baseweb="select"] svg {
-        fill: #6b7280 !important;
-    }
     /* --- END OF FIX --- */
 
     /* 6. HEADER STYLING */
@@ -124,69 +121,7 @@ st.write("---")
 
 # --- THE RECIPE DATABASE ---
 recipes = [
-    # --- NEW: PANTRY STAPLES & SIDES (The missing links!) ---
-    {
-        "name": "Buttered Sweet Corn 🌽",
-        "ingredients": {"corn", "butter", "salt", "pepper"},
-        "instructions": "Boil or steam corn. Toss generously with butter, salt, and pepper.",
-        "image": "https://images.unsplash.com/photo-1551754655-4d7862924585?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Garlic Sautéed Mushrooms 🍄",
-        "ingredients": {"mushrooms", "butter", "garlic", "soy sauce", "parsley"},
-        "instructions": "Sauté mushrooms in butter until browned. Add garlic and soy sauce. Cook 2 mins.",
-        "image": "https://images.unsplash.com/photo-1520627581788-294084f74d0a?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Cheesy Rice 🍚",
-        "ingredients": {"rice", "cheese", "butter", "milk", "salt"},
-        "instructions": "Mix hot cooked rice with butter, milk, and cheese until melted and creamy.",
-        "image": "https://images.unsplash.com/photo-1596560548464-f010549b84d7?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Crispy Potato Wedges 🥔",
-        "ingredients": {"potatoes", "oil", "paprika", "salt", "garlic"},
-        "instructions": "Cut potatoes into wedges. Toss with oil and spices. Bake 400F for 30-35 mins.",
-        "image": "https://images.unsplash.com/photo-1630431341973-02e1b40a0f05?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Creamy Spinach 🥬",
-        "ingredients": {"spinach", "cream cheese", "butter", "garlic", "salt"},
-        "instructions": "Sauté spinach in butter. Stir in cream cheese and garlic until melted.",
-        "image": "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Corn Fritters 🌽",
-        "ingredients": {"corn", "flour", "eggs", "milk", "oil", "salt"},
-        "instructions": "Mix corn, flour, eggs, milk. Drop spoonfuls into hot oil and fry until golden.",
-        "image": "https://images.unsplash.com/photo-1564759077036-3def242e69c5?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Egg in a Hole 🍞",
-        "ingredients": {"bread", "eggs", "butter", "salt"},
-        "instructions": "Cut a hole in the bread. Fry bread in butter. Crack egg into the hole. Cook until set.",
-        "image": "https://images.unsplash.com/photo-1525351484164-8035a4206501?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Pasta Aglio e Olio 🍝",
-        "ingredients": {"pasta", "olive oil", "garlic", "chili flakes", "parsley"},
-        "instructions": "Sauté garlic and chili in generous oil. Toss with cooked pasta and pasta water.",
-        "image": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Tomato & Onion Scramble 🍳",
-        "ingredients": {"eggs", "tomato", "onion", "butter", "salt"},
-        "instructions": "Sauté onion and tomato in butter. Add beaten eggs and scramble until cooked.",
-        "image": "https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-        "name": "Cucumber Sandwiches 🥒",
-        "ingredients": {"bread", "cucumber", "cream cheese", "salt"},
-        "instructions": "Spread cream cheese on bread. Top with thinly sliced cucumber and salt. Remove crusts.",
-        "image": "https://images.unsplash.com/photo-1604423043492-41303788de80?auto=format&fit=crop&w=600&q=80"
-    },
-
-    # --- VEGGIE SPECIALS (5-6 Ingredients) ---
+    # --- NEW VEGGIE SPECIALS (5-6 Ingredients) ---
     {
         "name": "Roasted Brussels Sprouts 🥬",
         "ingredients": {"brussels sprouts", "olive oil", "balsamic vinegar", "honey", "salt"},
@@ -545,7 +480,7 @@ sorted_ingredients = sorted(list(all_possible_ingredients))
 # 2. Sidebar Controls
 st.sidebar.title("🥑 The Fridge")
 
-# --- FILTERS ---
+# --- MOVED FILTERS TO TOP FOR VISIBILITY ---
 st.sidebar.header("Filters")
 only_full_match = st.sidebar.checkbox("✅ Cook Now (Full Match)", value=False)
 simple_meals_only = st.sidebar.checkbox("🥕 Simple Meals (5-6 Ingredients)", value=False)
