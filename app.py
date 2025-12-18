@@ -11,216 +11,152 @@ with st.sidebar:
     st.write("---")
     dark_mode = st.toggle("🌙 Dark Mode", value=False)
 
-# --- DEFINE CSS THEMES ---
+# --- CSS INJECTION ---
+# We use one giant block to ensure variables match the selected mode
 
-# 1. LIGHT THEME (Clean, Soft 3D)
-light_theme_css = """
-<style>
-    :root { color-scheme: light; }
-    .stApp { background-color: #f3f6f8 !important; }
-    
-    /* Text Colors */
-    h1, h2, h3, h4, h5, h6, p, div, span, label, li, textarea, .stMarkdown {
-        color: #1e293b !important;
-        font-family: 'Inter', sans-serif;
-    }
-    
-    /* Sidebar */
-    section[data-testid="stSidebar"] { 
-        background-color: #ffffff !important; 
-        border-right: 1px solid #e2e8f0;
-        box-shadow: 4px 0 15px rgba(0,0,0,0.02);
-    }
-    
-    /* Inputs */
-    .stTextArea textarea {
-        background-color: #f8fafc !important;
-        border: 1px solid #cbd5e1;
-        border-radius: 12px;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-    }
-    
-    /* --- TABS: PILL DESIGN (No Underline) --- */
-    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
-    .stTabs [data-baseweb="tab"] {
-        background-color: white;
-        border: 1px solid #e2e8f0;
-        color: #64748b;
-        border-radius: 30px; /* Full pill */
-        padding: 8px 20px;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    }
-    .stTabs [aria-selected="true"] { 
-        background-color: #2563eb !important; /* Solid Blue */
-        color: white !important;
-        border: 1px solid #2563eb !important;
-        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3); /* Glow */
-    }
-    
-    /* --- 3D CARD DESIGN (Light) --- */
-    [data-testid="stVerticalBlockBorderWrapper"] {
-        background: linear-gradient(145deg, #ffffff, #f8fafc); /* Subtle gradient */
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 20px !important;
-        padding: 24px !important;
-        /* Double shadow for 3D effect */
-        box-shadow: 
-            0 4px 6px -1px rgba(0, 0, 0, 0.05), 
-            0 10px 15px -3px rgba(0, 0, 0, 0.05),
-            0 0 0 1px rgba(255,255,255,0.5) inset; /* Inner highlight */
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    
-    [data-testid="stVerticalBlockBorderWrapper"]:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-        border-color: #cbd5e1 !important;
-    }
-
-    /* Badges (Light) */
-    .have-tag { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .missing-tag { background-color: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
-    
-    /* Sidebar Tag (Light) */
-    .sidebar-tag { 
-        background-color: #eff6ff; 
-        color: #1e40af; 
-        border: 1px solid #dbeafe; 
-    }
-</style>
-"""
-
-# 2. DARK THEME (Sleek, High Contrast)
-dark_theme_css = """
-<style>
-    :root { color-scheme: dark; }
-    .stApp { background-color: #0f1117 !important; } /* Deep dark background */
-    
-    /* Text Colors */
-    h1, h2, h3, h4, h5, h6, p, div, span, label, li, textarea, .stMarkdown {
-        color: #f1f5f9 !important;
-        font-family: 'Inter', sans-serif;
-    }
-    
-    /* Sidebar */
-    section[data-testid="stSidebar"] { 
-        background-color: #161b22 !important; 
-        border-right: 1px solid #30363d; 
-    }
-    
-    /* Inputs */
-    .stTextArea textarea {
-        background-color: #0d1117 !important;
-        color: #e6edf3 !important;
-        border: 1px solid #30363d;
-        border-radius: 12px;
-    }
-    .stTextArea label { color: #58a6ff !important; }
-    
-    /* --- TABS: DARK PILL --- */
-    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
-    .stTabs [data-baseweb="tab"] {
-        background-color: rgba(255,255,255,0.05);
-        border: 1px solid #30363d;
-        color: #8b949e;
-        border-radius: 30px;
-        padding: 8px 20px;
-        font-weight: 600;
-        transition: all 0.2s ease;
-    }
-    .stTabs [aria-selected="true"] { 
-        background-color: #1f6feb !important; /* Bright Blue */
-        color: white !important;
-        border: 1px solid #1f6feb !important;
-        box-shadow: 0 0 15px rgba(31, 111, 235, 0.4); /* Glow effect */
-    }
-    
-    /* --- 3D CARD DESIGN (Dark) --- */
-    [data-testid="stVerticalBlockBorderWrapper"] {
-        background: linear-gradient(145deg, #1c2128, #161b22); /* Dark Gradient */
-        border: 1px solid #30363d !important;
-        /* The secret to 3D in dark mode: Top Highlight */
-        border-top: 1px solid rgba(255,255,255,0.15) !important; 
-        border-radius: 20px !important;
-        padding: 24px !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    
-    [data-testid="stVerticalBlockBorderWrapper"]:hover {
-        transform: translateY(-4px);
-        background: #21262d;
-        border-color: #8b949e !important;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    }
-
-    /* Badges (Dark) */
-    .have-tag { background-color: #238636; color: #ffffff; border: none; }
-    .missing-tag { background-color: #21262d; color: #8b949e; border: 1px solid #30363d; }
-    
-    /* Sidebar Tag (Dark - Fixed Visibility) */
-    .sidebar-tag { 
-        background-color: #1f6feb; /* Bright Blue Background */
-        color: #ffffff; /* White Text */
-        border: none;
-    }
-    
-    /* Icons/Containers */
-    button[kind="header"] { color: white !important; }
-    .streamlit-expanderHeader { background-color: transparent !important; color: inherit !important; }
-</style>
-"""
-
-# --- INJECT CSS ---
 if dark_mode:
-    st.markdown(dark_theme_css, unsafe_allow_html=True)
+    # --- DARK MODE STYLES ---
+    page_bg = "#0e1117"
+    card_bg = "linear-gradient(145deg, #1e2329, #161b22)"
+    text_color = "#f0f2f6"
+    card_border = "1px solid rgba(255,255,255,0.08)"
+    card_shadow = "5px 5px 15px #0b0d10, -5px -5px 15px #222831"
+    tab_active_bg = "linear-gradient(90deg, #2563eb, #0d9488)"
+    tab_text = "#9ca3af"
+    tab_active_text = "#ffffff"
 else:
-    st.markdown(light_theme_css, unsafe_allow_html=True)
+    # --- LIGHT MODE STYLES ---
+    page_bg = "#f3f4f6"
+    card_bg = "linear-gradient(145deg, #ffffff, #f0f0f0)"
+    text_color = "#1f2937"
+    card_border = "1px solid #ffffff"
+    card_shadow = "5px 5px 10px #d1d5db, -5px -5px 10px #ffffff"
+    tab_active_bg = "linear-gradient(90deg, #0d9488, #2563eb)"
+    tab_text = "#64748b"
+    tab_active_text = "#ffffff"
 
-# --- GLOBAL STYLES ---
-st.markdown("""
+st.markdown(f"""
 <style>
-    /* GENERAL BADGE STYLE */
-    .have-tag, .missing-tag {
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        display: inline-block;
-        margin: 3px;
-        letter-spacing: 0.5px;
-    }
-    
-    /* SIDEBAR BADGE STYLE */
-    .sidebar-tag {
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        display: inline-block;
-        margin: 3px;
-    }
+    /* 1. APP BACKGROUND & TEXT */
+    .stApp {{
+        background-color: {page_bg} !important;
+    }}
+    h1, h2, h3, h4, h5, h6, p, div, span, label, li, textarea, .stMarkdown {{
+        color: {text_color} !important;
+        font-family: 'Inter', sans-serif;
+    }}
 
-    /* CARD TITLE */
-    h3 {
-        font-weight: 800 !important;
-        font-size: 1.5rem !important;
-        margin-bottom: 0.2rem !important;
-        padding-top: 0 !important;
-        letter-spacing: -0.5px;
-    }
+    /* 2. SIDEBAR */
+    section[data-testid="stSidebar"] {{
+        background-color: {page_bg} !important;
+        border-right: 1px solid rgba(150,150,150, 0.1);
+    }}
     
-    /* STATS LINE */
-    .recipe-stats {
-        font-size: 0.95rem;
-        font-weight: 600;
+    /* 3. INPUT TEXT AREA */
+    .stTextArea textarea {{
+        background-color: rgba(150,150,150, 0.1) !important;
+        color: {text_color} !important;
+        border: 1px solid rgba(150,150,150, 0.2);
+        border-radius: 10px;
+    }}
+
+    /* 4. TABS (The Pill Design - NO RED LINE) */
+    
+    /* Hide the default highlight line */
+    div[data-baseweb="tab-highlight"] {{
+        display: none !important;
+    }}
+    div[data-baseweb="tab-border"] {{
+        display: none !important;
+    }}
+    
+    /* Style the tab buttons */
+    button[data-baseweb="tab"] {{
+        background-color: rgba(150,150,150, 0.1) !important;
+        border-radius: 20px !important;
+        margin-right: 8px !important;
+        padding: 4px 16px !important;
+        color: {tab_text} !important;
+        border: none !important;
+        font-weight: 600 !important;
+    }}
+    
+    /* Active Tab Style */
+    button[data-baseweb="tab"][aria-selected="true"] {{
+        background: {tab_active_bg} !important;
+        color: {tab_active_text} !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }}
+
+    /* 5. 3D CARDS */
+    [data-testid="stVerticalBlockBorderWrapper"] {{
+        background: {card_bg} !important;
+        border: {card_border} !important;
+        border-radius: 20px !important;
+        padding: 20px !important;
+        box-shadow: {card_shadow} !important;
+        margin-bottom: 20px;
+        transition: transform 0.2s ease;
+    }}
+    
+    [data-testid="stVerticalBlockBorderWrapper"]:hover {{
+        transform: translateY(-5px);
+    }}
+    
+    /* 6. BADGES */
+    .have-tag {{
+        background-color: #10b981; 
+        color: white !important; 
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 0.8rem;
+        display: inline-block;
+        margin: 2px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }}
+    
+    .missing-tag {{
+        background-color: rgba(150,150,150, 0.2);
+        color: {text_color} !important;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        display: inline-block;
+        margin: 2px;
         opacity: 0.7;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+    }}
+    
+    .sidebar-tag {{
+        background-color: #3b82f6; 
+        color: white !important; 
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        display: inline-block;
+        margin: 4px 2px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }}
+    
+    /* 7. TITLE STYLING */
+    h3 {{
+        margin-top: 0 !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.5px;
+    }}
+    
+    /* 8. HIDE EXPANDER BORDERS */
+    .streamlit-expanderHeader {{
+        background-color: transparent !important;
+        border: none !important;
+    }}
+    [data-testid="stExpander"] {{
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -783,7 +719,7 @@ def render_recipes(filter_mode="all"):
         with (col1 if i % 2 == 0 else col2):
             with st.container(border=True):
                 st.subheader(recipe['name'])
-                st.markdown(f'<div class="recipe-stats">⏱️ {recipe.get("time", "--")}</div>', unsafe_allow_html=True)
+                st.caption(f"⏱️ {recipe.get('time', '--')}")
                 
                 if item['match_percent'] == 100:
                     st.progress(item['match_percent'], text="🔥 Perfect Match!")
