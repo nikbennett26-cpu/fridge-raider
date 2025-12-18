@@ -31,7 +31,7 @@ st.markdown("""
     
     /* --- 5. THE DROPDOWN FIX (HIGH CONTRAST DARK MODE) --- */
     
-    /* Force the dropdown container to be Dark (matching your phone) */
+    /* Force the dropdown container to be Dark */
     div[data-baseweb="popover"], div[data-baseweb="popover"] > div {
         background-color: #111111 !important;
         border: 1px solid #333333 !important;
@@ -165,6 +165,12 @@ recipes = [
         "instructions": "Toast bread, smash avocado with lemon. Top with fried/poached egg and chili.",
         "image": "https://images.unsplash.com/photo-1525351484164-8035a4206501?auto=format&fit=crop&w=600&q=80"
     },
+    {
+        "name": "Veggie Breakfast Hash 🥔",
+        "ingredients": {"potatoes", "bell pepper", "onion", "eggs", "oil"},
+        "instructions": "Dice potatoes, peppers, and onions. Fry until soft/crispy. Crack eggs on top and steam until set.",
+        "image": "https://images.unsplash.com/photo-1590554035658-4560b411d735?auto=format&fit=crop&w=600&q=80"
+    },
 
     # --- LUNCH ---
     {
@@ -214,6 +220,12 @@ recipes = [
         "ingredients": {"quinoa", "cucumber", "tomato", "lemon", "feta", "parsley"},
         "instructions": "Cook quinoa. Mix with chopped veggies, crumbled feta, lemon juice and herbs.",
         "image": "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Zucchini Fritters 🥒",
+        "ingredients": {"zucchini", "flour", "eggs", "cheese", "garlic", "oil"},
+        "instructions": "Grate zucchini and squeeze out water. Mix with flour, egg, cheese. Fry spoonfuls in oil until crispy.",
+        "image": "https://images.unsplash.com/photo-1563229569-4252a1d7f02b?auto=format&fit=crop&w=600&q=80"
     },
 
     # --- DINNER ---
@@ -325,6 +337,42 @@ recipes = [
         "instructions": "Place salmon on foil. Top with butter, garlic, lemon. Bake 400F for 12-15 mins.",
         "image": "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80"
     },
+    {
+        "name": "Stuffed Bell Peppers 🫑",
+        "ingredients": {"bell pepper", "ground beef", "rice", "cheese", "tomato sauce"},
+        "instructions": "Hollow out peppers. Fill with cooked beef/rice/sauce mix. Top with cheese. Bake 375F for 30m.",
+        "image": "https://images.unsplash.com/photo-1529321044792-229d4c72803b?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Veggie Fajitas 🌮",
+        "ingredients": {"bell pepper", "onion", "tortilla", "lime", "oil", "chili powder"},
+        "instructions": "Slice peppers and onions. Fry in hot oil with spices. Serve in warm tortillas with lime.",
+        "image": "https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Ratatouille 🍆",
+        "ingredients": {"zucchini", "eggplant", "bell pepper", "tomato", "onion", "olive oil"},
+        "instructions": "Slice all veggies into rounds. Layer in a baking dish with oil and herbs. Bake until tender.",
+        "image": "https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Eggplant Parmesan 🍆",
+        "ingredients": {"eggplant", "tomato sauce", "cheese", "flour", "oil", "parmesan"},
+        "instructions": "Bread and fry eggplant slices. Layer with sauce and cheeses in dish. Bake until bubbly.",
+        "image": "https://images.unsplash.com/photo-1625944122171-487627441584?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Roasted Cauliflower Tacos 🌮",
+        "ingredients": {"cauliflower", "tortilla", "lime", "cabbage", "avocado", "oil"},
+        "instructions": "Roast cauliflower florets with spices. Serve in tacos with cabbage slaw and avocado.",
+        "image": "https://images.unsplash.com/photo-1596450523450-482025740441?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Garlic Green Beans 🥒",
+        "ingredients": {"green beans", "butter", "garlic", "lemon", "almonds"},
+        "instructions": "Blanch beans. Sauté garlic in butter. Toss beans in butter mix. Top with lemon/almonds.",
+        "image": "https://images.unsplash.com/photo-1550951478-439401777596?auto=format&fit=crop&w=600&q=80"
+    },
     
     # --- DESSERT / SNACKS ---
     {
@@ -362,6 +410,18 @@ recipes = [
         "ingredients": {"eggs", "mayo", "mustard", "paprika"},
         "instructions": "Boil eggs, peel, halve. Mix yolks with mayo/mustard. Pipe back in. Dust paprika.",
         "image": "https://images.unsplash.com/photo-1590412200988-a436970781fa?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Sweet Potato Fries 🍟",
+        "ingredients": {"sweet potato", "oil", "salt", "paprika", "cornstarch"},
+        "instructions": "Cut potatoes into sticks. Toss with cornstarch, oil, spices. Bake 425F until crispy (25m).",
+        "image": "https://images.unsplash.com/photo-1541280047394-4b533a6503c2?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Roasted Asparagus 🌿",
+        "ingredients": {"asparagus", "olive oil", "lemon", "parmesan", "garlic"},
+        "instructions": "Toss asparagus in oil and garlic. Roast 400F for 10-15 mins. Top with lemon/parmesan.",
+        "image": "https://images.unsplash.com/photo-1516684669134-de6d7c47743b?auto=format&fit=crop&w=600&q=80"
     }
 ]
 
