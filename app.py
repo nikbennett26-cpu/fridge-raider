@@ -35,14 +35,14 @@ light_theme_css = """
         border: 1px solid #cbd5e1;
     }
     
-    /* Header Gradient (Teal/Blue for Freshness) */
+    /* Header Gradient (Teal/Blue) */
     h1 {
         background: -webkit-linear-gradient(45deg, #0d9488, #3b82f6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
     
-    /* Cards (Tabs/Expanders) */
+    /* Tabs */
     .stTabs [data-baseweb="tab"] {
         background-color: #ffffff;
         border: 1px solid #e2e8f0;
@@ -87,7 +87,7 @@ dark_theme_css = """
         -webkit-text-fill-color: transparent;
     }
     
-    /* Cards */
+    /* Tabs */
     .stTabs [data-baseweb="tab"] {
         background-color: #1e293b;
         border: 1px solid #334155;
@@ -100,7 +100,7 @@ dark_theme_css = """
     .missing-tag { background-color: #334155; color: #94a3b8; border: 1px dashed #475569; }
     .sidebar-tag { background-color: #0c4a6e; color: #bae6fd; border: 1px solid #0284c7; }
     
-    /* Fix Icons */
+    /* Icons */
     button[kind="header"] { color: white !important; }
     [data-testid="stExpander"] { background-color: #1e293b !important; border: 1px solid #334155; }
     .streamlit-expanderHeader { background-color: #1e293b !important; color: #f1f5f9 !important; }
@@ -124,11 +124,6 @@ st.markdown("""
         display: inline-block;
         margin: 2px;
     }
-    .info-badge {
-        font-size: 0.9rem;
-        font-weight: 500;
-        opacity: 0.8;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -147,7 +142,51 @@ NON_VEGAN_ITEMS = {
 
 # --- THE RECIPE DATABASE ---
 recipes = [
-    # --- VEGAN SPECIALS 🌱 ---
+    # --- 1. EMPTY FRIDGE / PANTRY STAPLES (New!) ---
+    {
+        "name": "Buttered Sweet Corn 🌽",
+        "ingredients": {"corn", "butter", "salt", "pepper"},
+        "instructions": "Boil or steam corn. Toss generously with butter, salt, and pepper.",
+        "image": "https://images.unsplash.com/photo-1551754655-4d7862924585?auto=format&fit=crop&w=600&q=80",
+        "time": "10 mins", "calories": "150 kcal"
+    },
+    {
+        "name": "Cheesy Rice 🍚",
+        "ingredients": {"rice", "cheese", "butter", "milk", "salt"},
+        "instructions": "Mix hot cooked rice with butter, milk, and cheese until melted and creamy.",
+        "image": "https://images.unsplash.com/photo-1596560548464-f010549b84d7?auto=format&fit=crop&w=600&q=80",
+        "time": "20 mins", "calories": "350 kcal"
+    },
+    {
+        "name": "Egg in a Hole 🍞",
+        "ingredients": {"bread", "eggs", "butter", "salt"},
+        "instructions": "Cut a hole in the bread. Fry bread in butter. Crack egg into the hole. Cook until set.",
+        "image": "https://images.unsplash.com/photo-1525351484164-8035a4206501?auto=format&fit=crop&w=600&q=80",
+        "time": "10 mins", "calories": "280 kcal"
+    },
+    {
+        "name": "Garlic Sautéed Mushrooms 🍄",
+        "ingredients": {"mushrooms", "butter", "garlic", "soy sauce", "parsley"},
+        "instructions": "Sauté mushrooms in butter until browned. Add garlic and soy sauce. Cook 2 mins.",
+        "image": "https://images.unsplash.com/photo-1520627581788-294084f74d0a?auto=format&fit=crop&w=600&q=80",
+        "time": "12 mins", "calories": "120 kcal"
+    },
+    {
+        "name": "Pasta Aglio e Olio 🍝",
+        "ingredients": {"pasta", "olive oil", "garlic", "chili flakes", "parsley"},
+        "instructions": "Sauté garlic and chili in generous oil. Toss with cooked pasta and pasta water.",
+        "image": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80",
+        "time": "15 mins", "calories": "400 kcal"
+    },
+     {
+        "name": "Tomato & Onion Scramble 🍳",
+        "ingredients": {"eggs", "tomato", "onion", "butter", "salt"},
+        "instructions": "Sauté onion and tomato in butter. Add beaten eggs and scramble until cooked.",
+        "image": "https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=600&q=80",
+        "time": "10 mins", "calories": "250 kcal"
+    },
+
+    # --- 2. VEGAN SPECIALS 🌱 ---
     {
         "name": "Spicy Peanut Noodles 🍜",
         "ingredients": {"pasta", "peanut butter", "soy sauce", "garlic", "chili flakes", "lime"},
@@ -204,36 +243,8 @@ recipes = [
         "image": "https://images.unsplash.com/photo-1576092794353-91c271811e51?auto=format&fit=crop&w=600&q=80",
         "time": "35 mins", "calories": "180 kcal"
     },
-    {
-        "name": "Pasta Aglio e Olio 🍝",
-        "ingredients": {"pasta", "olive oil", "garlic", "chili flakes", "parsley"},
-        "instructions": "Sauté garlic and chili in generous oil. Toss with cooked pasta and pasta water.",
-        "image": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=600&q=80",
-        "time": "15 mins", "calories": "400 kcal"
-    },
 
-    # --- VEGETARIAN / PANTRY STAPLES ---
-    {
-        "name": "Buttered Sweet Corn 🌽",
-        "ingredients": {"corn", "butter", "salt", "pepper"},
-        "instructions": "Boil or steam corn. Toss generously with butter, salt, and pepper.",
-        "image": "https://images.unsplash.com/photo-1551754655-4d7862924585?auto=format&fit=crop&w=600&q=80",
-        "time": "10 mins", "calories": "150 kcal"
-    },
-    {
-        "name": "Garlic Sautéed Mushrooms 🍄",
-        "ingredients": {"mushrooms", "butter", "garlic", "soy sauce", "parsley"},
-        "instructions": "Sauté mushrooms in butter until browned. Add garlic and soy sauce. Cook 2 mins.",
-        "image": "https://images.unsplash.com/photo-1520627581788-294084f74d0a?auto=format&fit=crop&w=600&q=80",
-        "time": "12 mins", "calories": "120 kcal"
-    },
-    {
-        "name": "Cheesy Rice 🍚",
-        "ingredients": {"rice", "cheese", "butter", "milk", "salt"},
-        "instructions": "Mix hot cooked rice with butter, milk, and cheese until melted and creamy.",
-        "image": "https://images.unsplash.com/photo-1596560548464-f010549b84d7?auto=format&fit=crop&w=600&q=80",
-        "time": "20 mins", "calories": "350 kcal"
-    },
+    # --- 3. THE CLASSICS (Vegetarian & Meat) ---
     {
         "name": "Roasted Brussels Sprouts 🥬",
         "ingredients": {"brussels sprouts", "olive oil", "balsamic vinegar", "honey", "salt"},
